@@ -130,6 +130,18 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid 
 .pn{font-size:14px;line-height:1.3;max-width:100%;overflow-wrap:anywhere}
 .pblk{width:100%;border-radius:14px 14px 0 0;background:linear-gradient(180deg,var(--pc),rgba(0,0,0,.25));display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;box-shadow:inset 0 4px 0 rgba(255,255,255,.4)}
 .pm{font-size:34px;line-height:1}.pr{font-family:var(--disp);font-size:30px;font-weight:700;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.25)}
+
+/* إعادة الإعدادات */
+.rsbox{margin-top:12px;background:#fff4e8;border:3px solid var(--line,#2b1a0e);border-radius:12px;padding:10px 12px}
+.rsbox h3{margin:0 0 6px;font-family:var(--disp);font-weight:700;color:#c0392b;font-size:20px}
+.rsgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.rsitem{display:flex;flex-direction:column;gap:6px;background:#fff;border:2px solid #e2d3c0;border-radius:12px;padding:8px 10px}
+.rsitem.ask{border-color:#c62828;background:#fff1f1}
+.rsitem b{color:var(--ink)}.rsitem small{color:#5b4a3a;font-weight:600;line-height:1.6}
+.rsitem select{font:inherit;font-weight:700;padding:4px 8px;border-radius:10px;border:2px solid var(--line,#2b1a0e);color:var(--ink);background:#fff}
+.rsitem .b3d{font-size:15px;padding:6px 12px;align-self:flex-start}
+.rsok{margin:0 0 8px;background:#e6f9ee;border:2px solid #1e8e4e;border-radius:10px;padding:4px 10px;font-weight:800;color:#1e7a46}
+@media (max-width:620px){.rsgrid{grid-template-columns:1fr}}
 /* صفحة المعلم */
 .rp h1{font-family:var(--disp);font-weight:700;font-size:28px;margin:0;color:var(--teal-d)}
 .rp .meta{margin:0;color:#4b5b68;font-weight:700;font-size:14px}
@@ -953,7 +965,7 @@ async function saveResult(r){if(DB){try{await DB.collection('results').add(r);re
 async function loadResults(){if(DB){try{const s=await DB.collection('results').orderBy('at','desc').limit(800).get();return s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){}}return localAll().slice().reverse()}
 
 /* ================= صفحة المعلم ================= */
-const TEACHER_PIN='1234';let pinOk=false,rTab='grid',rConfirm=false;
+const TEACHER_PIN='1234';let pinOk=false,rTab='grid',rConfirm=false,rsOpen=false,rsAsk=null,rsDone='';
 function pinGate(){
  stopGame();if(pinOk){results();return}
  app.innerHTML=`<div class="screen"><div class="card rp" style="max-width:420px;margin:30px auto;text-align:center">
@@ -992,10 +1004,13 @@ async function results(){
   ${body}
   <div class="btns" style="justify-content:space-between"><button class="b3d g" id="bk">⬅ الصفحة الرئيسية</button><button class="b3d y" id="pod">🏆 منصّة الأبطال</button>
    <span class="row"><button class="b3d o" id="csv">⬇ تنزيل Excel (CSV)</button><button class="b3d v" id="ua">${unlockAll?'🔒 أعد قفل العوالم':'🔓 افتح كل العوالم'}</button>${rConfirm?`<span class="confirm">حذف كل النتائج نهائيًا؟ <button class="b3d p" id="yes">نعم</button><button class="b3d g" id="no">إلغاء</button></span>`:`<button class="b3d p" id="clr">🗑 مسح النتائج</button>`}</span></div>
+  <div class="btns" style="justify-content:flex-start;margin-top:12px"><button class="b3d p" id="rs">♻️ إعادة الإعدادات</button></div>
+  ${rsOpen?resetPanel():''}
   <p class="meta" style="margin-top:8px">«افتح كل العوالم» يتيح على هذا الجهاز الدخول إلى أي درس مباشرة، مثلًا لتشغيل درس اليوم على السبورة.</p>
   <p class="meta" id="msg"></p></div></div>`;
  app.querySelectorAll('.rtab').forEach(b=>b.onclick=()=>{rTab=b.dataset.t;results()});
  $('bk').onclick=home;
+ bindReset();
  $('pod').onclick=()=>podium(results);
  $('ua').onclick=()=>{unlockAll=!unlockAll;LS.set('faris-unlock-all',unlockAll);results()};
  $('csv').onclick=()=>exportCsv(all);
@@ -1036,6 +1051,37 @@ async function podium(back){
   <div class="btns"><button class="b3d g" id="bk">⬅ رجوع</button></div></div>`;
  if(rk.length){beep('win');confetti()}
  $('bk').onclick=back||home;
+}
+
+/* ================= إعادة الإعدادات (صفحة المعلم) ================= */
+const RESETS={
+ student:{t:'إعادة تعيين طالب واحد',d:'يمسح تقدّم الطالب المختار على هذا الجهاز: العوالم والنجوم والعملات والكنوز والأوسمة وشخصيته، فيبدأ من جديد.'},
+ progress:{t:'مسح تقدّم كل الطلاب',d:'يمسح تقدّم جميع الطلاب على هذا الجهاز ويُبقي نتائج صفحة المعلم.'},
+ worlds:{t:'إعادة قفل العوالم',d:'يُلغي «افتح كل العوالم» فتعود العوالم تُفتح بالترتيب.'},
+ all:{t:'إعادة ضبط كاملة',d:'يعيد اللعبة على هذا الجهاز كما كانت أول مرة: يمسح تقدّم كل الطلاب، والنتائج المحفوظة على الجهاز، واسم آخر لاعب، ويعيد قفل العوالم.'}
+};
+let rsPick='';
+function resetPanel(){
+ const names=Object.keys(profAll());
+ return `<div class="rsbox">
+  <h3>♻️ إعادة الإعدادات</h3>
+  ${rsDone?`<p class="rsok">✅ ${esc(rsDone)}</p>`:''}
+  <div class="rsgrid">${Object.entries(RESETS).map(([k,v])=>`<div class="rsitem ${rsAsk===k?'ask':''}"><b>${v.t}</b><small>${v.d}</small>
+   ${k==='student'?`<select id="rsName" aria-label="اختر الطالب"><option value="">— اختر الطالب —</option>${names.map(n=>`<option${n===rsPick?' selected':''}>${esc(n)}</option>`).join('')}</select>${names.length?'':'<small>لا يوجد طلاب لعبوا على هذا الجهاز بعد.</small>'}`:''}
+   ${rsAsk===k?`<span class="confirm">هل أنت متأكد؟ لا يمكن التراجع. <button class="b3d p" data-rsy="${k}">نعم، نفّذ</button><button class="b3d g" data-rsn="1">إلغاء</button></span>`:`<button class="b3d ${k==='all'?'p':'g'}" data-rs="${k}">${k==='all'?'⚠️ ':''}${v.t}</button>`}</div>`).join('')}</div>
+  <p class="meta">تؤثر هذه الخيارات على هذا الجهاز فقط. لمسح نتائج كل الطلاب استخدم زر «🗑 مسح النتائج».</p></div>`;
+}
+function bindReset(){
+ const rs=$('rs');if(rs)rs.onclick=()=>{rsOpen=!rsOpen;rsAsk=null;rsDone='';results()};
+ const sel=$('rsName');if(sel)sel.onchange=()=>{rsPick=sel.value};
+ app.querySelectorAll('[data-rs]').forEach(b=>b.onclick=()=>{const k=b.dataset.rs;if(k==='student'&&!rsPick){const m=$('msg');if(m)m.textContent='اختر اسم الطالب أولًا.';beep('no');return}rsAsk=k;rsDone='';results()});
+ app.querySelectorAll('[data-rsn]').forEach(b=>b.onclick=()=>{rsAsk=null;results()});
+ app.querySelectorAll('[data-rsy]').forEach(b=>b.onclick=()=>{const k=b.dataset.rsy;
+  if(k==='student'){const a=profAll();delete a[rsPick];LS.set('faris-prof',a);rsDone='أُعيد تعيين الطالب: '+rsPick;rsPick=''}
+  if(k==='progress'){LS.set('faris-prof',{});rsDone='مُسح تقدّم كل الطلاب على هذا الجهاز.'}
+  if(k==='worlds'){unlockAll=false;LS.set('faris-unlock-all',false);rsDone='أُعيد قفل العوالم.'}
+  if(k==='all'){['faris-prof','faris-unlock-all','faris-player',LOCAL_KEY].forEach(key=>{try{localStorage.removeItem(key)}catch(e){}});unlockAll=false;player='';CUR={wi:0,rounds:[]};rsDone='أُعيدت اللعبة على هذا الجهاز كما كانت أول مرة.'}
+  rsAsk=null;beep('ok');results()});
 }
 
 

@@ -213,6 +213,18 @@ body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:90px;pointe
 .node.here .disc{animation:hop 1.2s ease-in-out infinite}
 .crest{animation:bob 2.4s ease-in-out infinite}
 .opt img{transition:transform .15s}.opt:hover img{transform:translateY(-3px)}
+
+/* مساحة لعب كبيرة */
+body.playing{padding-left:max(6px,env(safe-area-inset-left,0px));padding-right:max(6px,env(safe-area-inset-right,0px))}
+.playing .wrap{max-width:none;padding-block:6px 10px}
+.playing .hud{padding:4px 8px;gap:6px}
+.playing .q{margin:6px 0;padding:4px 10px}.playing .q div{font-size:clamp(17px,4vw,24px)}
+.playing .view{width:100%;border-width:3px}
+.playing .pad{max-width:none;margin-top:8px}
+.xbtn{border:3px solid var(--line,#2b1a0e);background:#e53935;color:#fff;border-radius:10px;width:34px;height:30px;padding:0;font-weight:900;font-size:16px;line-height:1}
+.land .pad{position:fixed;left:0;right:0;bottom:max(8px,env(safe-area-inset-bottom,0px));padding:0 max(14px,env(safe-area-inset-left,0px)) 0 max(14px,env(safe-area-inset-right,0px));margin:0;z-index:20;pointer-events:none}
+.land .pad .b3d{pointer-events:auto;opacity:.82;height:64px}
+.land .q small{display:inline;margin-inline-end:8px}.land .q div{display:inline}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -1018,7 +1030,7 @@ const THEMES=[
  {n:'كهوف البركان',sky:['#3b1f2b','#8a3b3b'],hill:'#5a2a2a',top:'#8d6e63',body:'#4e342e',plat:'#ff6f91',en:'#212121',cl:'rgba(255,200,170,.25)',lava:1,ic:'🌋',peak:0},
  {n:'قلاع السحاب',sky:['#7ec8ff','#e4f5ff'],hill:'#ffffff',top:'#8fd0ff',body:'#9aa9c7',plat:'#ffffff',en:'#4a148c',cl:'rgba(255,255,255,.35)',lava:0,ic:'☁️',peak:0}];
 let G=null;
-function stopGame(){if(G){G.stop=true;removeEventListener('keydown',G.kd);removeEventListener('keyup',G.ku);G=null}}
+function stopGame(){document.body.classList.remove('playing');if(G){G.stop=true;removeEventListener('keydown',G.kd);removeEventListener('keyup',G.ku);if(G.rs)removeEventListener('resize',G.rs);G=null}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&G.pause)G.pause()});
 function heartsHtml(h){return [0,1,2].map(k=>`<span class="${k<h?'':'lost'}">❤️</span>`).join('')}
 
@@ -1026,18 +1038,24 @@ function startStage(wi,s){
  stopGame();
  const w=WORLDS[wi],p=prof(),A=p.av,TH=THEMES[wi%4],rounds=stageRounds(s),N=rounds.length,boss=s===2;
  app.innerHTML=`<div class="screen">
-  <div class="hud"><img class="mini-av" alt="" src="${avURL(A,26)}"><b>${w.short} • ${STAGE_NAMES[s]}</b><span class="hearts sp" id="hearts">${heartsHtml(3)}</span><span class="pill y" id="cn">🪙 ٠</span></div>
+  <div class="hud"><img class="mini-av" alt="" src="${avURL(A,26)}"><b>${w.short} • ${STAGE_NAMES[s]}</b><span class="hearts sp" id="hearts">${heartsHtml(3)}</span><button class="xbtn" id="bk" aria-label="خروج">✖</button><span class="pill y" id="cn">🪙 ٠</span></div>
   <div class="q"><small id="qi">اقفز واضرب صندوق الإجابة الصحيحة برأسك</small><div id="qp"></div></div>
   <div class="view"><canvas id="cv" aria-label="مرحلة اللعب"></canvas>
    <div class="over" id="ov"><div><b style="font-size:19px;color:var(--yellow)">${w.icon} ${w.short} • ${STAGE_NAMES[s]}</b>
     <p>اجرِ واقفز، واضرب <span style="font-weight:900;color:var(--yellow)">من الأسفل</span> صندوق الإجابة الصحيحة 📦${boss?'<br>🐉 كل إجابة صحيحة تُضعف الحارس':''}</p>
     <button class="b3d y" id="go" style="font-size:22px;padding:10px 40px">ابدأ ▶</button>
+    ${innerWidth<innerHeight&&innerWidth<700?'<p style="margin-top:8px;font-size:13px;color:#ffd34e">🔄 أدِر الجوال أفقيًّا لمساحة لعب أكبر</p>':''}
     <p style="margin-top:8px;font-size:13px">الجوال: الأزرار في الأسفل، أو المس يمين الساحة/يسارها للحركة واسحب للأعلى للقفز</p></div></div></div>
   <div class="pad"><div><button class="b3d g" data-k="R" aria-label="يمين">▶</button><button class="b3d g" data-k="L" aria-label="يسار">◀</button></div><button class="b3d o jbtn" data-k="J" aria-label="قفز">⤒ قفز</button></div>
-  <div class="btns"><button class="b3d g" id="bk">⬅ خروج</button></div></div>`;
+  </div>`;
  const cv=$('cv'),x=cv.getContext('2d');
- const W=Math.min(app.clientWidth,760),H=W<500?310:380,dpr=window.devicePixelRatio||1;
- cv.style.width=W+'px';cv.style.height=H+'px';cv.width=W*dpr;cv.height=H*dpr;x.scale(dpr,dpr);
+ document.body.classList.add('playing');scrollTo(0,0);
+ const dpr=window.devicePixelRatio||1;
+ const isLand=()=>innerWidth>innerHeight&&innerHeight<520;
+ function fit(){document.body.classList.toggle('land',isLand());const cw=app.clientWidth,res=(document.querySelector('.hud').offsetHeight+document.querySelector('.q').offsetHeight+(isLand()?0:document.querySelector('.pad').offsetHeight)+(isLand()?16:34));
+  const ch=Math.max(isLand()?200:300,Math.min(innerHeight-res,cw*1.4,820));const k=Math.max(isLand()?.75:1,Math.min(ch/340,cw/300,1.6));
+  cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);x.setTransform(dpr*k,0,0,dpr*k,0,0);return {W:cw/k,H:ch/k}}
+ let {W,H}=fit();
  const GY=H-52,SEG=1000,START=160;
  const solids=[],crates=[],enemies=[],gates=[],coins=[],fx=[];let chest=null;
  const chestSeg=N>1?1:0;
@@ -1064,6 +1082,9 @@ function startStage(wi,s){
  const R={wi,s,total:N,correct:0,coins:0,stomps:0,hits:0,chest:false,miss:[],win:false,bossBeaten:false};
  const keys={L:0,R:0,J:0};let cam=0,cur=0,run=false,done=false,lastJ=0,tPrev=0,hearts=3,res=[];
  G={stop:false};const S=G;
+ /* عند تدوير الجوال: نُبقي ارتفاع العالم ونعيد تحجيم الرسم */
+ S.rs=()=>{document.body.classList.toggle('land',isLand());const cw=app.clientWidth,res=(document.querySelector('.hud').offsetHeight+document.querySelector('.q').offsetHeight+(isLand()?0:document.querySelector('.pad').offsetHeight)+(isLand()?16:34));const ch=Math.max(260,Math.min(innerHeight-res,cw*1.4,820)),k=ch/H;cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);x.setTransform(dpr*k,0,0,dpr*k,0,0);W=cw/k};
+ addEventListener('resize',S.rs);
  const hills=Array.from({length:12},(_,j)=>({x:j*420+Math.random()*200,r:110+Math.random()*90}));
  const TK=[['round','pine'],['palm','palm'],['pine','round'],['round','palm']][wi%4];
  const trees=Array.from({length:Math.ceil((N*SEG+800)*.7/260)},(_,j)=>({x:j*260+Math.random()*120,s:.55+Math.random()*.3,k:TK[j%2]}));

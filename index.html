@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>مغامرة فارس</title>
+<meta name="theme-color" content="#0b3d4a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="الفعل المعتل">
+<meta name="format-detection" content="telephone=no">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&family=Lemonada:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* شاشة لعبة بألوان نشاط ١: سماء ليلية فيروزية، أزرار ثلاثية الأبعاد، شريط حالة علوي */
+:root{color-scheme:dark;--teal:#0f9d9a;--teal-d:#0b6e75;--orange:#ff8a3d;--orange-d:#c9611f;--yellow:#ffd34e;--yellow-d:#d9a91c;--pink:#ff6f91;--pink-d:#c94a6b;--sky1:#0d3b2c;--sky2:#123a4a;--ink:#1d2b3a;--card:#fffdf7;--ok:#2ecc71;--no:#ff5b5b;--txt:#fff;
+--disp:'Lemonada','Cairo',Tahoma,sans-serif;--body:'Cairo','Segoe UI',Tahoma,Arial,sans-serif}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;touch-action:manipulation}button{-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{margin:0;font-family:var(--body);color:var(--txt);background:radial-gradient(ellipse at 50% -10%,#2f8f5b 0%,transparent 55%),radial-gradient(circle at 100% 100%,#0f5a5a 0%,transparent 45%),linear-gradient(180deg,var(--sky1),var(--sky2));background-attachment:fixed;
+padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden}
+#sky{position:fixed;inset:0;pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding-block:12px 20px}
+button{font:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+/* أزرار ثلاثية الأبعاد */
+.b3d{border:0;border-radius:18px;color:#fff;font-weight:900;padding:10px 26px;font-size:19px;background:var(--c,var(--teal));box-shadow:0 6px 0 var(--cd,var(--teal-d)),0 10px 18px rgba(0,0,0,.3);transition:transform .08s,box-shadow .08s;text-shadow:0 2px 0 rgba(0,0,0,.18)}
+.b3d:active:not(:disabled){transform:translateY(5px);box-shadow:0 1px 0 var(--cd,var(--teal-d)),0 3px 8px rgba(0,0,0,.3)}
+.b3d.y{--c:var(--yellow);--cd:var(--yellow-d);color:var(--ink);text-shadow:none}
+.b3d.p{--c:var(--pink);--cd:var(--pink-d)}
+.b3d.o{--c:var(--orange);--cd:var(--orange-d)}
+.b3d.g{--c:#3d5a73;--cd:#26394a}
+/* الشاشة الرئيسية */
+.hdr{background:#fff;border-radius:14px;padding:4px 10px;margin:0 auto 10px;max-width:520px}
+.hdr img{display:block;margin:0 auto;height:52px;max-width:100%;object-fit:contain}
+.logo{text-align:center;margin:6px 0 4px}
+.logo h1{font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:clamp(30px,6.4vw,50px);line-height:1.15;margin:0;color:var(--yellow);text-shadow:0 4px 0 var(--orange-d),0 8px 18px rgba(0,0,0,.45);text-wrap:balance}
+.logo p{margin:2px 0 0;font-weight:800;color:#bdeeed;font-size:16px}
+.player{margin:14px auto;max-width:560px;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.18);border-radius:20px;padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.player .av{flex:none;width:52px;height:52px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;font-size:28px;box-shadow:0 4px 0 var(--yellow-d)}
+.player label{font-weight:900;color:var(--yellow);flex:none}
+.player select,.player input{flex:1;min-width:0;font:inherit;font-weight:800;font-size:17px;padding:8px 12px;border-radius:14px;border:3px solid var(--orange);background:#fff;color:var(--ink)}
+.player .warn{flex-basis:100%;margin:0;color:#ffc2cf;font-weight:700;font-size:14px}
+.worlds{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+.world{position:relative;text-align:center;border:0;border-radius:22px;padding:16px 10px 14px;color:#fff;background:var(--c);box-shadow:0 7px 0 var(--cd),0 12px 22px rgba(0,0,0,.35);transition:transform .1s}
+.world:hover{transform:translateY(-3px)}
+.world:active{transform:translateY(5px);box-shadow:0 2px 0 var(--cd)}
+.world .ic{font-size:44px;line-height:1.2;display:block;filter:drop-shadow(0 3px 0 rgba(0,0,0,.2))}
+.world .nm{display:block;font-family:var(--disp);font-size:24px;line-height:1.3}
+.world .sub{display:block;font-weight:700;font-size:14px;opacity:.95}
+.world .best{position:absolute;top:8px;left:10px;background:rgba(0,0,0,.25);border-radius:999px;padding:0 10px;font-weight:800;font-size:13px}
+.world .lv{position:absolute;top:8px;right:10px;background:#fff;color:var(--ink);border-radius:999px;padding:0 10px;font-weight:900;font-size:13px}
+.w1{--c:var(--teal);--cd:var(--teal-d)}.w2{--c:var(--orange);--cd:var(--orange-d)}.w3{--c:var(--pink);--cd:var(--pink-d)}.w4{--c:#6c5ce7;--cd:#4b3db8}
+.opts-row{display:flex;justify-content:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.toggle{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.25);color:#fff;border-radius:999px;padding:4px 16px;font-weight:800}
+.toggle[aria-pressed="true"]{background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
+.credits{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:18px;font-weight:700;font-size:13.5px;color:#a9cfd6;border-top:1px dashed rgba(255,255,255,.2);padding-top:8px}
+/* شريط الحالة */
+.hud{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:rgba(0,0,0,.25);border-radius:18px;padding:6px 10px}
+.pill{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border-radius:999px;padding:2px 12px;font-weight:900;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill.nm{max-width:44%;overflow:hidden;text-overflow:ellipsis;background:var(--yellow);color:var(--ink)}
+.pill.sp{margin-inline-start:auto}
+.dots{display:flex;gap:5px;margin:10px 0 4px;justify-content:center}
+.dots i{width:22px;height:9px;border-radius:999px;background:rgba(255,255,255,.18)}
+.dots i.ok{background:var(--ok)}.dots i.no{background:var(--no)}.dots i.cur{background:var(--yellow);box-shadow:0 0 0 3px rgba(255,211,78,.3)}
+.timer{height:12px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden;margin:6px 0 10px}
+.timer div{height:100%;width:100%;background:linear-gradient(90deg,var(--no),var(--yellow),var(--ok));transform-origin:right;transition:transform .2s linear}
+/* بطاقة السؤال */
+.qcard{background:var(--card);color:var(--ink);border-radius:24px;padding:14px 16px 16px;box-shadow:0 10px 0 rgba(0,0,0,.18),0 18px 30px rgba(0,0,0,.35);border:4px solid var(--teal)}
+.qtop{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--teal-d);font-size:16px}
+.qtop .n{flex:none;width:38px;height:38px;border-radius:12px;background:var(--orange);color:#fff;display:grid;place-items:center;font-size:18px;box-shadow:0 3px 0 var(--orange-d)}
+.qtop .tag{margin-inline-start:auto;background:var(--teal);color:#fff;border-radius:999px;padding:0 12px;font-size:13.5px}
+.sent{margin-top:10px;background:#eaf8f7;border-radius:16px;padding:12px 14px;font-size:clamp(20px,4.6vw,27px);font-weight:800;text-align:center;line-height:1.7}
+.sent u{text-decoration-thickness:3px;text-underline-offset:8px;color:var(--pink-d)}
+.sent .gap{display:inline-block;min-width:96px;border-bottom:4px dashed var(--orange);color:var(--orange)}
+.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.answers.long{grid-template-columns:1fr}
+.ans{position:relative;min-height:66px;font-size:clamp(19px,4vw,24px);border-radius:18px;padding:8px 16px 8px 14px;display:flex;align-items:center;justify-content:center;gap:10px;line-height:1.45}
+.answers.long .ans{justify-content:flex-start;font-size:17px;text-align:right;min-height:58px}
+.ans .sh{flex:none;width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.25);display:grid;place-items:center;font-size:15px}
+.ans:disabled{cursor:default}
+.ans.dim{opacity:.35}
+.ans.right{--c:var(--ok);--cd:#1e8e4e;opacity:1;animation:bounce .4s}
+.ans.wrong{--c:var(--no);--cd:#b83a3a;opacity:1;animation:shake .35s}
+.fb{margin-top:14px;border-radius:16px;padding:8px 14px;font-weight:700;display:flex;gap:10px;align-items:flex-start;font-size:16px}
+.fb.ok{background:#e3f9ec;border:2px solid var(--ok)}.fb.no{background:#ffe9e9;border:2px solid var(--no)}
+.fb b{flex:none;font-size:17px}
+.next{display:flex;justify-content:center;margin-top:14px}
+.float{position:fixed;font-family:var(--disp);font-size:34px;color:var(--yellow);text-shadow:0 3px 0 var(--orange-d);pointer-events:none;z-index:40;animation:up 1s ease-out forwards}
+/* القاعدة */
+.rule{background:var(--card);color:var(--ink);border-radius:24px;padding:16px;border:4px dashed var(--yellow);box-shadow:0 12px 26px rgba(0,0,0,.35);text-align:center}
+.rule .ic{font-size:50px;line-height:1.1}
+.rule h2{font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:28px;margin:4px 0;color:var(--teal-d)}
+.rule p{margin:0 auto;max-width:60ch;font-weight:700;font-size:17px;line-height:1.8}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:10px}
+.chips span{background:#fff4e8;border:2.5px solid var(--orange);border-radius:999px;padding:2px 14px;font-weight:800}
+.btns{display:flex;justify-content:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+/* النهاية */
+.end{text-align:center}
+.trophy{font-size:80px;line-height:1.1;animation:bounce 1s infinite alternate}
+.stars{font-size:60px;letter-spacing:8px;line-height:1.1}
+.stars span{color:rgba(255,255,255,.18)}
+.stars .lit{color:var(--yellow);text-shadow:0 4px 0 var(--orange-d);display:inline-block;animation:pop .5s backwards}
+.stars .lit:nth-child(2){animation-delay:.2s}.stars .lit:nth-child(3){animation-delay:.4s}
+.end h2{font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:32px;margin:6px 0;color:#fff}
+.grade{display:inline-flex;flex-direction:column;align-items:center;background:var(--card);color:var(--ink);border-radius:22px;padding:6px 26px;border:4px solid var(--pink);box-shadow:0 6px 0 var(--pink-d)}
+.grade small{font-weight:800;color:var(--pink-d)}
+.grade b{font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:48px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stats{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.badge{display:inline-block;margin-top:12px;background:var(--yellow);color:var(--ink);border-radius:14px;padding:4px 18px;font-weight:900;box-shadow:0 4px 0 var(--yellow-d)}
+/* صفحة النتائج */
+.teacher{background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.25);color:#fff;border-radius:999px;padding:4px 16px;font-weight:800}
+.saved{margin-top:10px;font-weight:700;font-size:14px;color:#bdeeed}
+.rp{background:var(--card);color:var(--ink);border-radius:24px;padding:14px 16px;border:4px solid var(--teal);box-shadow:0 12px 26px rgba(0,0,0,.35)}
+.rp h1{font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:32px;margin:0;color:var(--teal-d);line-height:1.3}
+.rp .meta{margin:0;color:#4b5b68;font-weight:700;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0}
+.kpi{border-radius:16px;padding:6px 10px;text-align:center;background:#eaf8f7;border:2px solid #bfe6e4}
+.kpi b{display:block;font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:30px;line-height:1.2;color:var(--teal-d);font-variant-numeric:tabular-nums}
+.kpi span{font-weight:700;font-size:13px;color:#4b5b68}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.tab{border:2px solid var(--teal);background:#fff;color:var(--teal-d);border-radius:999px;padding:2px 16px;font-weight:800}
+.tab[aria-selected="true"]{background:var(--teal);color:#fff}
+.scroll{overflow-x:auto;border-radius:14px;border:2px solid #e2ecee}
+table.res{width:100%;border-collapse:collapse;font-size:14.5px;min-width:560px}
+.res th{background:var(--teal-d);color:#fff;font-weight:800;padding:6px 8px;text-align:right;position:sticky;top:0}
+.res td{padding:5px 8px;border-top:1px solid #edf2f3;font-weight:600;font-variant-numeric:tabular-nums}
+.res tr:nth-child(even) td{background:#f7fbfb}
+.res td.c{text-align:center}
+.sc{display:inline-block;min-width:48px;text-align:center;border-radius:999px;padding:0 8px;font-weight:900}
+.s3{background:#d9f5e5;color:#1e7a46}.s2{background:#fff1c7;color:#8a6400}.s1{background:#ffe3d1;color:#a24a12}.s0{background:#ffe0e0;color:#b33}.sn{color:#9aa7b0}
+.empty{text-align:center;padding:18px;font-weight:700;color:#4b5b68}
+.tools{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;margin-top:12px;align-items:center}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#ffe9e9;border:2px solid var(--no);border-radius:14px;padding:6px 10px;font-weight:800}
+.note{font-size:13.5px;font-weight:700;color:#4b5b68;margin:8px 0 0}
+@media (max-width:600px){.kpis{grid-template-columns:repeat(2,1fr)}}
+/* أنماط اللعب */
+.rule.mini{padding:10px 14px}.rule.mini .ic{font-size:34px}.rule.mini h2{font-size:22px}.rule.mini p{font-size:15px}
+h3.pick{font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:26px;text-align:center;margin:14px 0 4px;color:var(--yellow);text-shadow:0 3px 0 var(--orange-d)}
+.w5{--c:#1e88e5;--cd:#1565c0}.world.wide{grid-column:1/-1}
+.trail{background:rgba(0,0,0,.25);border-radius:18px;padding:6px 10px;margin:10px 0}
+.tr-top{display:flex;justify-content:space-between;align-items:center;font-weight:900;gap:8px;flex-wrap:wrap}
+.zone{color:var(--yellow)}.hearts{font-size:20px;letter-spacing:2px}.hearts .lost{filter:grayscale(1);opacity:.3}
+.path{display:flex;align-items:center;justify-content:space-between;margin-top:6px;padding-top:18px}
+.node{position:relative;flex:none;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:15px;border:2px solid rgba(255,255,255,.25)}
+.node.ok{background:#2ecc71;border-color:#2ecc71}.node.no{background:var(--no);border-color:var(--no)}.node.cur{background:var(--yellow);border-color:#fff;box-shadow:0 0 0 4px rgba(255,211,78,.35)}
+.node .hero{position:absolute;top:-24px;font-size:20px;animation:bounce .5s infinite alternate}
+.seg{flex:1;height:3px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.4) 0 5px,transparent 5px 9px);min-width:4px}
+.memtop{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}.memtop b{font-variant-numeric:tabular-nums}
+.hint{text-align:center;font-weight:700;color:#bdeeed;margin:8px 0}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.mcard{position:relative;aspect-ratio:3/2.6;max-width:100%;border:0;border-radius:16px;padding:0;perspective:600px;background:transparent}
+.mcard span{position:absolute;inset:0;border-radius:16px;display:grid;place-items:center;padding:6px;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .35s;font-weight:900;line-height:1.35}
+.mcard .back{background:linear-gradient(135deg,#6c5ce7,#4b3db8);font-size:30px;box-shadow:0 5px 0 #392e8f}
+.mcard .face{transform:rotateY(180deg);background:var(--card);color:var(--ink);font-size:clamp(13px,3.4vw,17px);border:3px solid var(--orange);box-shadow:0 5px 0 var(--orange-d)}
+.mcard .face.b{border-color:var(--teal);box-shadow:0 5px 0 var(--teal-d);font-size:clamp(12px,3vw,15px)}
+.mcard.up .back{transform:rotateY(180deg)}.mcard.up .face{transform:rotateY(360deg)}
+.mcard.done .face{background:#d9f5e5;border-color:#2ecc71;box-shadow:0 5px 0 #1e8e4e}
+.mcard.bad .face{background:#ffe0e0;border-color:var(--no);animation:shake .35s}
+.snq{background:var(--card);color:var(--ink);border-radius:16px;padding:6px 12px;text-align:center;margin:8px 0;border:3px solid var(--yellow)}
+.snq small{display:block;font-weight:900;color:var(--teal-d);font-size:14px}
+.snq div{font-size:clamp(19px,4.4vw,25px);font-weight:900}.snq .gap{display:inline-block;min-width:70px;border-bottom:4px dashed var(--orange);color:var(--orange)}
+.snwrap{position:relative;width:max-content;max-width:100%;margin:0 auto;border-radius:16px;overflow:hidden;border:4px solid var(--teal);box-shadow:0 10px 24px rgba(0,0,0,.35);touch-action:none}
+.snwrap canvas{display:block;max-width:100%}
+.snover{position:absolute;inset:0;background:rgba(11,61,74,.82);display:grid;place-items:center;text-align:center;padding:14px}
+.snover b{display:block;font-size:19px;margin:4px 0}.snover p{margin:0 0 10px;font-size:14px;color:#bdeeed}
+.pad{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:12px}.pad div{display:flex;gap:8px}
+.pad .b3d{width:64px;height:54px;padding:0;font-size:22px}.pad.row{flex-direction:row;justify-content:center;gap:24px}.pad.row .b3d{width:110px}
+@media (max-width:600px){.mgrid{grid-template-columns:repeat(3,1fr)}.node{width:24px;height:24px;font-size:12px}}
+/* الأوسمة */
+.lvcard{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.2);border-radius:16px;padding:6px 10px;margin-top:4px;flex-wrap:wrap}
+.lvi{font-size:30px}.lvb{flex:1;min-width:150px}.lvb b{color:var(--yellow)}.lvb small{font-weight:700;color:#bdeeed;font-variant-numeric:tabular-nums}
+.xp{height:10px;border-radius:999px;background:rgba(255,255,255,.15);overflow:hidden;margin:3px 0}.xp div{height:100%;background:linear-gradient(90deg,var(--yellow),var(--orange))}
+.lvbtn{border:0;border-radius:999px;background:var(--pink);color:#fff;font-weight:900;padding:4px 14px;box-shadow:0 3px 0 var(--pink-d)}
+.bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.bdg{border-radius:16px;padding:8px 6px;text-align:center;background:#eef2f3;border:2px dashed #c9d3d7;color:#7d8b95;line-height:1.4}
+.bdg .bi{display:block;font-size:34px;filter:grayscale(1);opacity:.6}.bdg b{display:block;font-size:14.5px}.bdg small{display:block;font-size:12px;font-weight:600}
+.bdg.got{background:linear-gradient(160deg,#fff6d6,#ffe9b0);border:2px solid var(--yellow);color:var(--ink);box-shadow:0 4px 0 var(--yellow-d)}.bdg.got .bi{filter:none;opacity:1}
+.newb{background:rgba(255,255,255,.08);border:2px dashed var(--yellow);border-radius:18px;padding:8px 10px;margin:12px auto 0;max-width:620px}
+.newb h3{margin:0;font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:26px;color:var(--yellow)}
+.lvup{display:inline-block;margin-top:10px;background:var(--teal);border-radius:14px;padding:4px 16px;font-weight:800;box-shadow:0 4px 0 var(--teal-d)}
+.lvls{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.lvls span{flex:1;min-width:80px;text-align:center;border-radius:12px;padding:2px 6px;background:#eef2f3;color:#7d8b95;font-weight:800;font-size:14px}
+.lvls span small{display:block;font-size:11px}.lvls span.on{background:#eaf8f7;color:var(--teal-d);border:2px solid var(--teal)}
+@media (max-width:600px){.bgrid{grid-template-columns:repeat(2,1fr)}}
+.w6{--c:#e53935;--cd:#b71c1c}
+.jpad{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px auto 0;max-width:520px;user-select:none;-webkit-user-select:none}
+.jpad div{display:flex;gap:10px}.jpad .b3d{height:62px;width:74px;padding:0;font-size:24px;touch-action:none}.jpad .jbtn{width:130px;font-size:22px}
+h3.sect{font-family:var(--disp);font-weight:700;letter-spacing:0;font-size:28px;margin:16px 0 4px;color:var(--yellow);text-shadow:0 3px 0 var(--orange-d)}
+.worlds.sm{grid-template-columns:repeat(3,1fr);gap:12px}
+.worlds.sm .world{padding:22px 6px 10px}.worlds.sm .world .ic{font-size:34px}.worlds.sm .world .nm{font-size:19px}
+.world.boss{grid-column:1/-1}
+@media (max-width:600px){.worlds.sm{grid-template-columns:repeat(2,1fr)}.worlds.sm .world .nm{font-size:17px}}
+/* هوية مغامرة فارس: غابة ليلية، دروع الفارس، شرائط الأقسام */
+.logo .crest{display:inline-grid;place-items:center;width:64px;height:72px;margin-bottom:4px;background:linear-gradient(160deg,var(--yellow),var(--orange));clip-path:polygon(50% 0,100% 14%,100% 58%,50% 100%,0 58%,0 14%);font-size:34px;filter:drop-shadow(0 4px 0 var(--orange-d))}
+.world{border-radius:26px 26px 26px 26px / 22px 22px 34px 34px;border:3px solid rgba(255,255,255,.55)}
+.world::after{content:"";position:absolute;inset:5px 10px auto;height:34%;border-radius:18px 18px 40% 40%;background:linear-gradient(180deg,rgba(255,255,255,.28),transparent);pointer-events:none}
+.worlds.sm .world{clip-path:none}
+h3.sect{display:flex;align-items:center;justify-content:center;gap:8px;font-size:22px;color:var(--ink);text-shadow:none;background:linear-gradient(90deg,transparent,var(--yellow) 12%,var(--yellow) 88%,transparent);padding:4px 10px;border-radius:6px;margin:20px auto 10px;max-width:420px;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+h3.pick{font-size:21px}
+.player{background:rgba(0,0,0,.22);border-color:rgba(255,211,78,.45)}
+.hud{background:rgba(0,0,0,.32);border:1px solid rgba(255,211,78,.25)}
+.qcard{border-color:var(--yellow)}
+.confetti{position:fixed;top:-14px;width:10px;height:14px;border-radius:2px;pointer-events:none;z-index:50;animation:fall linear forwards}
+.screen{animation:pop .3s ease-out}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+@keyframes pop{0%{transform:scale(.85);opacity:.3}100%{transform:scale(1);opacity:1}}
+@keyframes up{to{transform:translateY(-70px);opacity:0}}
+@media (max-width:600px){.answers{grid-template-columns:1fr}.worlds{gap:10px}.world .nm{font-size:20px}.world .ic{font-size:36px}.pill.nm{max-width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="wrap" id="app"><div id="nojs" style="margin-top:30px;background:#fffdf7;color:#1d2b3a;border-radius:22px;padding:18px;border:4px solid #ffd34e;text-align:center;font-weight:700;line-height:1.9">
+<div style="font-size:44px">🎮</div><h1 style="margin:0;font-size:26px;color:#0b6e75">مغامرة الفعل المعتل</h1>
+<p style="margin:8px 0 0">يبدو أن اللعبة فُتحت في معاينة لا تشغّل الألعاب.</p>
+<p style="margin:4px 0 0">افتح الملف في متصفح <b>Chrome</b> أو <b>Safari</b>: اضغط على زر المشاركة أو «فتح في…» واختر المتصفح، أو افتح رابط اللعبة على Claude.</p>
+<p id="jserr" style="margin:8px 0 0;color:#b33;font-size:13px;direction:ltr"></p></div></div>
+<script>window.onerror=function(m,s,l){var e=document.getElementById('jserr');if(e)e.textContent='Error: '+m+' (line '+l+')'};</script>
+
+<script>
+/* أسماء طلاب الصف السادس — تُملأ من ملف المدرسة */
+const STUDENTS=["AHAD MOHAMMAD AMJID MOHAMMAD AMJID SA", "MOHAMMAD SHUJA ARSALAN BAIG", "أحمد صالح هرم الجعاطه", "احمد مبارك احمد سالم", "أحمد محمد احمد البوعركي", "اصيل ابراهيم صالح الزهراني", "بكيل فهمي علي التام", "حمد عبدالرحمن امحان العماش", "خالد عبدالرشيد عبدالوحيد عبدالمقتدر", "راشد عبدالله صالح عبدالله", "سلمان محمد صالح البيضاني", "صقر مسعود عذاب المحمد", "عادل نسيم نسيم عبدالقادر", "عبدالرحمن عبدالرحيم الله بخش رايب", "عبدالرحمن محمود عبدالله محمد", "علي حمدي علي الخضيري", "علي فاروق جبر عمقه", "عماد احمد نهار العنزي", "عمر عبدالجليل عبدالجليل", "عمر ناصر غلام البلوشي", "عمر يوسف عبدالرحمن احمد", "عيد سالم عيد ثاني", "فهد احمد ابراهيم مرهش", "ماجد وسيم تاج محمد محمد", "محمد احمد محمد النوبي", "محمد أمين رضا باطر", "محمد علي يحيى الخلاقي", "محمد فواز عيسى الدوسري", "وسام ناصر حسين الحاج", "يعقوب حسن علي العجي", "يعقوب محمد قاسم عبدالله"];
+
+const LESSONS=[
+ {name:'رفع الفعل المضارع معتل الآخر',short:'الرفع',icon:'⬆️',
+  rule:{h:'رفع المضارع المعتل الآخر',p:'إذا لم يسبقه ناصب ولا جازم فهو مرفوع، ويبقى حرف العلة ثابتًا. علامة رفعه الضمة المقدّرة: على الواو والياء للثقل، وعلى الألف للتعذّر.',ex:['يدعو ← مقدّرة للثقل','يمشي ← مقدّرة للثقل','يسعى ← مقدّرة للتعذّر']},
+  q:[
+   {s:'المعلّمُ <span class="gap">؟</span> طلابَه إلى الاجتهاد',ask:'اختر الصيغة الصحيحة:',o:['يدعو','يدعُ','يدعوَ'],a:0,why:'لم يسبقه ناصب ولا جازم، فهو مرفوع ويبقى حرف العلة.'},
+   {s:'الفلّاحُ <span class="gap">؟</span> الأشجارَ كلَّ صباح',ask:'اختر الصيغة الصحيحة:',o:['يسقي','يسقِ','يسقيَ'],a:0,why:'الفعل مرفوع فتبقى الياء، والضمة مقدّرة عليها للثقل.'},
+   {s:'المؤمنُ <span class="gap">؟</span> إلى رضا الله',ask:'اختر الصيغة الصحيحة:',o:['يسعى','يسعَ','يسعي'],a:0,why:'الفعل مرفوع فتبقى الألف، والضمة مقدّرة عليها للتعذّر.'},
+   {s:'<u>يسمو</u> المؤمنُ بأخلاقه',ask:'ما علامة رفع الفعل المسطّر؟',o:['ضمة مقدّرة على الواو للثقل','ضمة ظاهرة على الواو','ضمة مقدّرة على الواو للتعذّر'],a:0,why:'الضمة ثقيلة على الواو فقُدّرت للثقل.',two:1},
+   {s:'<u>يرقى</u> المجتهدُ إلى القمّة',ask:'ما علامة رفع الفعل المسطّر؟',o:['ضمة مقدّرة على الألف للتعذّر','ضمة مقدّرة على الألف للثقل','حذف حرف العلة'],a:0,why:'الألف لا تقبل الحركة أبدًا، فالتقدير للتعذّر.',two:1},
+   {s:'<u>يمشي</u> الطفلُ بهدوء',ask:'ما علامة رفع الفعل المسطّر؟',o:['ضمة مقدّرة على الياء للثقل','فتحة ظاهرة على الياء','حذف حرف العلة'],a:0,why:'الضمة على الياء ثقيلة فقُدّرت للثقل.',two:1},
+   {s:'لماذا تُقدَّر الضمة على الألف؟',ask:'اختر السبب الصحيح:',o:['للتعذّر؛ لأن الألف لا تقبل الحركة','للثقل؛ لأن الحركة ثقيلة عليها','لأن الألف محذوفة'],a:0,why:'يستحيل نطق الحركة على الألف، فهذا تعذّر.',two:1},
+   {s:'لماذا تُقدَّر الضمة على الواو والياء؟',ask:'اختر السبب الصحيح:',o:['للثقل','للتعذّر','لأنهما محذوفتان'],a:0,why:'يمكن نطق الضمة عليهما لكنها ثقيلة، فتُقدَّر للثقل.',two:1},
+   {s:'أيّ الجمل التالية فيها فعل مضارع معتل الآخر <u>مرفوع</u>؟',ask:'اختر الجملة:',o:['يرجو الطالبُ النجاحَ','لن يرجوَ الكسولُ النجاحَ','لم يرجُ الكسولُ النجاحَ'],a:0,why:'«يرجو» لم يسبقه ناصب ولا جازم، فهو مرفوع.',two:1},
+   {s:'<u>يجري</u> الماءُ في النهر',ask:'أعرب الفعل المسطّر:',o:['فعل مضارع مرفوع وعلامة رفعه الضمة المقدّرة على الياء للثقل','فعل مضارع منصوب وعلامة نصبه الفتحة الظاهرة','فعل مضارع مجزوم وعلامة جزمه حذف حرف العلة'],a:0,why:'لا ناصب ولا جازم قبله، فهو مرفوع بضمة مقدّرة للثقل.',two:1}
+  ]},
+ {name:'نصب الفعل المضارع معتل الآخر',short:'النصب',icon:'🎯',
+  rule:{h:'نصب المضارع المعتل الآخر',p:'بعد أدوات النصب (أنْ، لنْ، كي، حتى): تظهر الفتحة على الواو والياء لخفّتها، وتُقدَّر على الألف للتعذّر.',ex:['لن يدعوَ ← ظاهرة','أن يمشيَ ← ظاهرة','كي يسعى ← مقدّرة للتعذّر']},
+  q:[
+   {s:'أحبُّ أنْ <span class="gap">؟</span> ربّي في كل صلاة',ask:'اختر الصيغة الصحيحة:',o:['أدعوَ','أدعُ','أدعو'],a:0,why:'«أنْ» حرف نصب، والفتحة تظهر على الواو لخفّتها.'},
+   {s:'على الطالب أنْ <span class="gap">؟</span> في الممرّ بهدوء',ask:'اختر الصيغة الصحيحة:',o:['يمشيَ','يمشِ','يمشيُ'],a:0,why:'منصوب بـ«أنْ» وعلامة نصبه الفتحة الظاهرة على الياء.'},
+   {s:'ذهبتُ إلى المكتبة كي <span class="gap">؟</span> كتابًا',ask:'اختر الصيغة الصحيحة:',o:['أشتريَ','أشترِ','أشتريُ'],a:0,why:'«كي» ناصبة، فتظهر الفتحة على الياء.'},
+   {s:'لنْ <span class="gap">؟</span> المجتهدُ عن هدفه',ask:'اختر الصيغة الصحيحة:',o:['يتخلّى','يتخلَّ','يتخلّي'],a:0,why:'منصوب بـ«لن»، والألف تبقى وتُقدَّر عليها الفتحة للتعذّر.'},
+   {s:'لنْ <u>يسعى</u> المؤمنُ إلى الشرّ',ask:'ما علامة نصب الفعل المسطّر؟',o:['فتحة مقدّرة على الألف للتعذّر','فتحة ظاهرة على الألف','حذف حرف العلة'],a:0,why:'الألف لا تقبل الحركة، فتُقدَّر الفتحة للتعذّر.',two:1},
+   {s:'أذاكرُ كي <u>أرتقيَ</u> في دراستي',ask:'ما علامة نصب الفعل المسطّر؟',o:['فتحة ظاهرة على الياء','فتحة مقدّرة على الياء للثقل','ضمة مقدّرة على الياء'],a:0,why:'الفتحة خفيفة فتظهر على الياء.',two:1},
+   {s:'لن <u>يرجوَ</u> الكسولُ النجاحَ دون عمل',ask:'ما علامة نصب الفعل المسطّر؟',o:['فتحة ظاهرة على الواو','فتحة مقدّرة على الواو للثقل','حذف حرف العلة'],a:0,why:'الفتحة خفيفة فتظهر على الواو.',two:1},
+   {s:'لماذا تظهر الفتحة على الواو والياء؟',ask:'اختر السبب الصحيح:',o:['لخفّتها','لثقلها','لأنها مقدّرة'],a:0,why:'الفتحة أخفّ الحركات، فتظهر على الواو والياء.',two:1},
+   {s:'أيّ الأدوات التالية تنصب الفعل المضارع؟',ask:'اختر أداة النصب:',o:['لنْ','لمْ','لا الناهية'],a:0,why:'«لن» ناصبة، أما «لم» و«لا الناهية» فجازمتان.'},
+   {s:'أيّ الجمل التالية صحيحة؟',ask:'اختر الجملة الصحيحة:',o:['أريدُ أن أعلوَ بأخلاقي','أريدُ أن أعلُ بأخلاقي','أريدُ أن أعلو بأخلاقي'],a:0,why:'بعد «أن» تظهر الفتحة على الواو.',two:1}
+  ]},
+ {name:'جزم الفعل المضارع معتل الآخر',short:'الجزم',icon:'✂️',
+  rule:{h:'جزم المضارع المعتل الآخر',p:'بعد أدوات الجزم (لمْ، لا الناهية، لام الأمر) يُجزم بحذف حرف العلة، وتبقى قبله الحركة المناسبة له.',ex:['لم يدعُ ← حُذفت الواو','لا تمشِ ← حُذفت الياء','لم يسعَ ← حُذفت الألف']},
+  q:[
+   {s:'لمْ <span class="gap">؟</span> المؤمنُ إلا اللهَ',ask:'اختر الصيغة الصحيحة:',o:['يدعُ','يدعو','يدعوَ'],a:0,why:'«لم» جازمة، فتُحذف الواو وتبقى الضمة قبلها.'},
+   {s:'لا <span class="gap">؟</span> في الأرض مرحًا',ask:'اختر الصيغة الصحيحة:',o:['تمشِ','تمشي','تمشيَ'],a:0,why:'«لا» الناهية جازمة، فتُحذف الياء وتبقى الكسرة.'},
+   {s:'لمْ <span class="gap">؟</span> اللاعبُ عن حلمه',ask:'اختر الصيغة الصحيحة:',o:['يتخلَّ','يتخلّى','يتخلّي'],a:0,why:'مجزوم بحذف الألف، وتبقى الفتحة قبلها.'},
+   {s:'<span class="gap">؟</span> كلُّ طالبٍ إلى العلم',ask:'اختر الصيغة الصحيحة (لام الأمر):',o:['لِيسعَ','لِيسعى','لِيسعي'],a:0,why:'لام الأمر جازمة، فتُحذف الألف وتبقى الفتحة.'},
+   {s:'لا <span class="gap">؟</span> الكرةَ على زميلك',ask:'اختر الصيغة الصحيحة:',o:['ترمِ','ترمي','ترميَ'],a:0,why:'«لا» الناهية جازمة، فتُحذف الياء وتبقى الكسرة.'},
+   {s:'لمْ <span class="gap">؟</span> الطالبُ غيرَ النجاح',ask:'اختر الصيغة الصحيحة:',o:['يرجُ','يرجو','يرجوَ'],a:0,why:'«لم» جازمة، فتُحذف الواو وتبقى الضمة.'},
+   {s:'لمْ <u>يؤذِ</u> الطالبُ زميلَه',ask:'ما علامة جزم الفعل المسطّر؟',o:['حذف حرف العلة (الياء)','السكون الظاهر','كسرة ظاهرة'],a:0,why:'المضارع المعتل الآخر يُجزم بحذف حرف العلة.',two:1},
+   {s:'ما الحركة التي تبقى قبل الواو المحذوفة في «لم يدعُ»؟',ask:'اختر الإجابة:',o:['الضمة','الكسرة','الفتحة'],a:0,why:'الواو تناسبها الضمة، فتبقى الضمة دليلًا عليها.'},
+   {s:'أيّ الجمل التالية صحيحة؟',ask:'اختر الجملة الصحيحة:',o:['لم يسعَ الكسولُ إلى العلم','لم يسعى الكسولُ إلى العلم','لن يسعَ الكسولُ إلى العلم'],a:0,why:'بعد «لم» تُحذف الألف، أما «لن» فناصبة لا تحذف شيئًا.',two:1},
+   {s:'لمْ <u>يجرِ</u> الماءُ في الوادي هذا العام',ask:'أعرب الفعل المسطّر:',o:['فعل مضارع مجزوم وعلامة جزمه حذف حرف العلة','فعل مضارع مجزوم وعلامة جزمه السكون','فعل مضارع مرفوع وعلامة رفعه الضمة المقدّرة'],a:0,why:'سبقته «لم» الجازمة فحُذفت الياء.',two:1}
+  ]}
+];
+
+const MIX={name:'التحدي الشامل',short:'التحدي',icon:'🏆',mix:1};
+let WORLDS=[];
+const OLDW=['rafa','nasb','jazm','bossN'];
+const WID=id=>WORLDS.find(w=>w.id===id);
+const catWorlds=c=>WORLDS.filter(w=>w.cat===c&&!w.mix);
+const recW=r=>WID(typeof r.lesson==='number'?OLDW[r.lesson]:r.lesson)||{};
+
+/* ===== بنك العوالم: دروس النحو والإملاء – التدريبات اللغوية، الصف السادس، الجزء الأول ===== */
+/* q: [الجملة (___ مكان الفراغ)، السؤال، [الصحيح، خطأ، خطأ]، السبب، خيارات طويلة؟] */
+/* r: [الجملة بفراغ ___، الصحيح، خطأ، خطأ] */
+const WDATA={
+maadi:{cat:'nahw',name:'بناء الفعل الماضي على الضم والسكون',short:'الماضي المبني',icon:'🏛️',ins:'الفعل الماضي الصحيح',
+ rule:{h:'بناء الفعل الماضي',p:'الفعل الماضي مبنيّ على الفتح دائمًا، إلّا إذا اتصلت به واو الجماعة فيُبنى على الضمّ، وإذا اتصلت به التاء المتحرّكة أو نون النسوة أو نا الفاعلين فيُبنى على السكون.',ex:['شَعَرَ ← الفتح','شَعَرُوا ← الضمّ','شَعَرْتُ / شَعَرْنَ / شَعَرْنا ← السكون']},
+ q:[
+  ['الرجالُ <u>شَعَرُوا</u> بالفرح','ما علامة بناء الفعل المسطّر؟',['الضمّ لاتصاله بواو الجماعة','السكون لاتصاله بواو الجماعة','الفتح لأنه فعل ماضٍ'],'اتصلت به واو الجماعة فبُني على الضمّ.',1],
+  ['<u>شارَكْتُ</u> في المسابقة','ما علامة بناء الفعل المسطّر؟',['السكون لاتصاله بتاء الفاعل','الضمّ لاتصاله بتاء الفاعل','الفتح لأنه فعل ماضٍ'],'اتصلت به التاء المتحرّكة فبُني على السكون.',1],
+  ['الطالباتُ <u>قَرَأْنَ</u> القصة','ما علامة بناء الفعل المسطّر؟',['السكون لاتصاله بنون النسوة','الفتح لاتصاله بنون النسوة','الضمّ لاتصاله بنون النسوة'],'نون النسوة تجعل الماضي مبنيًّا على السكون.',1],
+  ['<u>حَصَلْنا</u> على الجائزة','ما علامة بناء الفعل المسطّر؟',['السكون لاتصاله بنا الفاعلين','الفتح لأنه فعل ماضٍ','الضمّ لاتصاله بنا الفاعلين'],'نا الفاعلين تجعل الماضي مبنيًّا على السكون.',1],
+  ['<u>سافَرَ</u> أبي إلى مكة','ما علامة بناء الفعل المسطّر؟',['الفتح','السكون','الضمّ'],'لم يتصل به شيء، فبقي على الأصل: الفتح.'],
+  ['اللاعبون ___ بالفوز','اختر الفعل المبنيّ على الضمّ:',['فَرِحُوا','فَرِحَ','فَرِحْنَ'],'الفعل المتصل بواو الجماعة يُبنى على الضمّ.'],
+  ['أنتِ ___ الدرسَ جيدًا','اختر الصيغة الصحيحة:',['فَهِمْتِ','فَهِمُوا','فَهِمَ'],'المخاطبة: تاء متحرّكة، فيُبنى الفعل على السكون.'],
+  ['متى يُبنى الفعل الماضي على الضمّ؟','اختر الإجابة الصحيحة:',['إذا اتصلت به واو الجماعة','إذا اتصلت به نون النسوة','إذا لم يتصل به شيء'],'واو الجماعة وحدها تجعله مبنيًّا على الضمّ.',1],
+  ['أيّ الأفعال الآتية مبنيّ على السكون؟','اختر الفعل:',['كَتَبْنا','كَتَبُوا','كَتَبَ'],'«كتبْنا» اتصلت به نا الفاعلين.'],
+  ['المعلّماتُ <u>شارَكْنَ</u> في الحفل','ما الضمير المتصل بالفعل المسطّر؟',['نون النسوة','نا الفاعلين','واو الجماعة'],'النون في «شاركْنَ» نون النسوة.']],
+ pairs:[['شَعَرُوا','مبنيّ على الضمّ'],['شَعَرْتُ','تاء الفاعل ← السكون'],['شَعَرْنَ','نون النسوة ← السكون'],['شَعَرْنا','نا الفاعلين ← السكون'],['شَعَرَ','مبنيّ على الفتح'],['واو الجماعة','تجعل الماضي مبنيًّا على الضمّ']],
+ r:[['الطلابُ ___ الدرسَ','فَهِمُوا','فَهِمَ','فَهِمْنَ'],['أنا ___ الكتابَ','قَرَأْتُ','قَرَأَ','قَرَأُوا'],['البناتُ ___ في الحديقة','لَعِبْنَ','لَعِبُوا','لَعِبَ'],['نحن ___ الواجبَ','كَتَبْنا','كَتَبُوا','كَتَبَ'],['المعلّمُ ___ الدرسَ','شَرَحَ','شَرَحُوا','شَرَحْنَ'],['أنتَ ___ في المسابقة','شارَكْتَ','شارَكُوا','شارَكَ'],['الجنودُ ___ عن الوطن','دافَعُوا','دافَعَ','دافَعْنَ'],['الأمهاتُ ___ الطعامَ','طَبَخْنَ','طَبَخُوا','طَبَخَ'],['أنتِ ___ النجاحَ','حَقَّقْتِ','حَقَّقُوا','حَقَّقَ'],['نحن ___ بالفرح','شَعَرْنا','شَعَرُوا','شَعَرَ']]},
+amr:{cat:'nahw',name:'بناء فعل الأمر المعتلّ الآخر',short:'الأمر المعتل',icon:'📣',ins:'فعل الأمر الصحيح',
+ rule:{h:'بناء فعل الأمر المعتلّ الآخر',p:'السكون هو علامة بناء فعل الأمر الصحيح الآخر، مثل: اقرأْ. وحذف حرف العلّة هو علامة بناء فعل الأمر المعتلّ الآخر.',ex:['يدعو ← ادْعُ','يرمي ← ارْمِ','يسعى ← اسْعَ']},
+ q:[
+  ['يا أحمدُ، ___ اللهَ في كل صلاة','اختر فعل الأمر الصحيح:',['ادْعُ','ادْعو','ادْعِ'],'حُذفت الواو وبقيت الضمّة قبلها.'],
+  ['يا خالدُ، ___ الكرةَ إلى زميلك','اختر فعل الأمر الصحيح:',['ارْمِ','ارْمي','ارْمُ'],'حُذفت الياء وبقيت الكسرة قبلها.'],
+  ['يا عليُّ، ___ إلى الخير دائمًا','اختر فعل الأمر الصحيح:',['اسْعَ','اسْعى','اسْعُ'],'حُذفت الألف وبقيت الفتحة قبلها.'],
+  ['<u>اقْرَأْ</u> قصةً مفيدة','ما علامة بناء فعل الأمر المسطّر؟',['السكون','حذف حرف العلّة','الفتح'],'«اقرأ» صحيح الآخر، فيُبنى على السكون.'],
+  ['<u>اعْتَنِ</u> بصحّتك','ما علامة بناء فعل الأمر المسطّر؟',['حذف حرف العلّة','السكون الظاهر','الكسرة'],'أصله «يعتني»، فحُذفت الياء.',1],
+  ['ما فعل الأمر من (يسمو) للمفرد المذكّر؟','اختر الإجابة:',['اسْمُ','اسْمو','اسْمِ'],'تُحذف الواو وتبقى الضمّة.'],
+  ['ما فعل الأمر من (يقضي) للمفرد المذكّر؟','اختر الإجابة:',['اقْضِ','اقْضي','اقْضُ'],'تُحذف الياء وتبقى الكسرة.'],
+  ['ما فعل الأمر من (يلقى) للمفرد المذكّر؟','اختر الإجابة:',['الْقَ','الْقى','الْقُ'],'تُحذف الألف وتبقى الفتحة.'],
+  ['علامة بناء فعل الأمر المعتلّ الآخر هي:','اختر الإجابة:',['حذف حرف العلّة','السكون','ثبوت النون'],'هذه قاعدة الدرس.',1],
+  ['<u>اجْرِ</u> في الملعب بسرعة','ما الحرف المحذوف من آخر الفعل؟',['الياء','الواو','الألف'],'أصله «يجري».']],
+ pairs:[['يدعو','ادْعُ'],['يرمي','ارْمِ'],['يسعى','اسْعَ'],['يقرأ','اقْرَأْ'],['الأمر المعتلّ الآخر','حذف حرف العلّة'],['الأمر الصحيح الآخر','السكون']],
+ r:[['يا عليُّ، ___ إلى الخير','ادْعُ','ادْعو','ادْعِ'],['يا سعدُ، ___ الكرةَ','ارْمِ','ارْمي','ارْمُ'],['يا ولدُ، ___ إلى العلم','اسْعَ','اسْعى','اسْعُ'],['يا خالدُ، ___ بأخيك الصغير','اعْتَنِ','اعْتَني','اعْتَنُ'],['يا صديقي، ___ بأخلاقك','اسْمُ','اسْمو','اسْمِ'],['يا محمدُ، ___ بالعدل','اقْضِ','اقْضي','اقْضُ'],['يا بُنيَّ، ___ النجاحَ بالعمل','ارْجُ','ارْجو','ارْجِ'],['يا أحمدُ، ___ القصّةَ','اقْرَأْ','اقْرَأُ','اقْرَأِ'],['يا لاعبُ، ___ بسرعة','اجْرِ','اجْري','اجْرُ'],['يا فارسُ، ___ عن الخطأ','اعْفُ','اعْفو','اعْفِ']]},
+khamsa:{cat:'nahw',name:'الأفعال الخمسة',short:'الأفعال الخمسة',icon:'🖐️',ins:'الصيغة الصحيحة',
+ rule:{h:'الأفعال الخمسة',p:'الأفعال الخمسة هي كلّ فعل مضارع اتّصلت به ألف الاثنين أو واو الجماعة أو ياء المخاطبة. علامة رفعها ثبوت النون، وعلامة نصبها وجزمها حذف النون.',ex:['يقتصدان / تقتصدان','يقتصدون / تقتصدون','تقتصدين']},
+ q:[
+  ['الطلابُ <u>يحافظون</u> على النظافة','ما علامة رفع الفعل المسطّر؟',['ثبوت النون','الضمّة','حذف النون'],'الأفعال الخمسة تُرفع بثبوت النون.'],
+  ['على الطلاب أنْ ___ على النظافة','اختر الصيغة الصحيحة:',['يحافظوا','يحافظون','يحافظُ'],'سبقته «أنْ» الناصبة فحُذفت النون.'],
+  ['الولدان لمْ ___ في استهلاك الماء','اختر الصيغة الصحيحة:',['يُسرفا','يُسرفان','يُسرفون'],'سبقته «لم» الجازمة فحُذفت النون.'],
+  ['أنتِ <u>تحرصين</u> على النظام','ما الضمير المتصل بالفعل؟',['ياء المخاطبة','ألف الاثنين','واو الجماعة'],'الياء في «تحرصين» ياء المخاطبة.'],
+  ['لماذا سُمّيت الأفعال الخمسة بهذا الاسم؟','اختر الإجابة:',['لأنّ صورها خمس','لأنّها تتكوّن من خمسة أحرف','لأنّ فيها خمس حركات'],'تقتصدان، يقتصدان، تقتصدون، يقتصدون، تقتصدين.',1],
+  ['علامة نصب الأفعال الخمسة وجزمها هي:','اختر الإجابة:',['حذف النون','ثبوت النون','الفتحة'],'هذه قاعدة الدرس.'],
+  ['لا ___ في أداء واجبكم','اختر الصيغة الصحيحة:',['تتهاونوا','تتهاونون','تتهاونين'],'«لا» الناهية جازمة فحُذفت النون.'],
+  ['أيّ الأفعال الآتية من الأفعال الخمسة؟','اختر الفعل:',['يكتبان','يكتبُ','كتبوا'],'«كتبوا» فعل ماضٍ، و«يكتب» لم يتصل به ضمير من الثلاثة.'],
+  ['هما <u>تُساهمان</u> في تنظيف الساحة','أعرب الفعل المسطّر:',['مرفوع وعلامة رفعه ثبوت النون','منصوب وعلامة نصبه حذف النون','مجزوم وعلامة جزمه حذف النون'],'لم يسبقه ناصب ولا جازم.',1],
+  ['يجب عليكِ أنْ ___ في الماء','اختر الصيغة الصحيحة:',['تقتصدي','تقتصدين','تقتصدوا'],'منصوب بـ«أنْ» وعلامة نصبه حذف النون.']],
+ pairs:[['يقتصدان','ألف الاثنين'],['يقتصدون','واو الجماعة'],['تقتصدين','ياء المخاطبة'],['رفع الأفعال الخمسة','ثبوت النون'],['نصبها وجزمها','حذف النون'],['لن يقتصدوا','منصوب بلن']],
+ r:[['الطلابُ ___ دروسهم','يراجعون','يراجعوا','يراجعُ'],['يا أولاد، لن ___ في الماء','تُسرفوا','تُسرفون','تُسرفين'],['أنتما لمْ ___ الواجب','تُهملا','تُهملان','تُهملون'],['أنتِ ___ أمَّكِ','تساعدين','تساعدي','تساعدون'],['عليكِ أنْ ___ مبكرًا','تنامي','تنامين','تناموا'],['اللاعبان ___ بالفوز','يفرحان','يفرحا','يفرحون'],['لا ___ الأشجار يا أطفال','تقطعوا','تقطعون','تقطعين'],['المواطنون ___ على المياه','يحافظون','يحافظوا','يحافظان'],['يا فتاة، لا ___ الوقت','تُضيّعي','تُضيّعين','تُضيّعوا'],['الصديقان لنْ ___ عن الحقّ','يتخلّيا','يتخلّيان','يتخلّون']]},
+ifrad:{cat:'nahw',name:'إفراد الفعل مع الفاعل',short:'إفراد الفعل',icon:'☝️',ins:'الفعل الصحيح',
+ rule:{h:'إفراد الفعل مع الفاعل',p:'يبقى الفعل في حالة الإفراد إذا تقدّم على الفاعل، مهما كان الفاعل مفردًا أو مثنّى أو جمعًا. أمّا إذا تقدّم الاسم على الفعل فيكون الفعل مطابقًا في العدد للاسم الذي يسبقه.',ex:['اشتاقَ الحاجّانِ','الحاجّانِ اشتاقا','المسلمون يحنّون']},
+ q:[
+  ['___ الحاجّانِ إلى زيارة المسجد الحرام','اختر الفعل الصحيح:',['اشتاقَ','اشتاقا','اشتاقوا'],'الفعل تقدّم على الفاعل فبقي مفردًا.'],
+  ['الحاجّانِ ___ إلى زيارة المسجد الحرام','اختر الفعل الصحيح:',['اشتاقا','اشتاقَ','اشتاقوا'],'تقدّم الاسم فطابقه الفعل في التثنية.'],
+  ['___ المسلمون إلى الوقوف بعرفات','اختر الفعل الصحيح:',['يحنُّ','يحنّون','يحنّان'],'الفعل قبل الفاعل يبقى مفردًا.'],
+  ['المسلمون ___ إلى الوقوف بعرفات','اختر الفعل الصحيح:',['يحنّون','يحنُّ','يحنّان'],'تقدّم الاسم فطابقه الفعل في الجمع.'],
+  ['___ المسلماتُ الصلاةَ في الحرم','اختر الفعل الصحيح:',['تؤدّي','يؤدّين','تؤدّيان'],'الفعل قبل الفاعل يبقى مفردًا.'],
+  ['المسلماتُ ___ الصلاةَ في الحرم','اختر الفعل الصحيح:',['يؤدّين','تؤدّي','يؤدّون'],'تقدّم الاسم فطابقه الفعل: جمع مؤنث.'],
+  ['متى يبقى الفعل مفردًا مع الفاعل المثنّى أو الجمع؟','اختر الإجابة:',['إذا تقدّم الفعل على الفاعل','إذا تأخّر الفعل عن الاسم','لا يبقى مفردًا أبدًا'],'هذه قاعدة الدرس.',1],
+  ['أيّ الجمل الآتية صحيحة؟','اختر الجملة:',['نجحَ الطلابُ','نجحوا الطلابُ','نجحا الطالبانِ'],'الفعل المتقدّم على فاعله يبقى مفردًا.',1],
+  ['المعلّمون ___ الطلابَ','اختر الفعل الصحيح:',['شجّعوا','شجّعَ','شجّعا'],'تقدّم الاسم الجمع فجاء الفعل جمعًا.'],
+  ['___ الطالبتانِ في المسابقة','اختر الفعل الصحيح:',['فازتِ','فازتا','فُزْنَ'],'الفعل قبل الفاعل يبقى مفردًا.']],
+ pairs:[['حضرَ الطلابُ','فعل مفرد قبل الجمع'],['الطلابُ حضروا','مطابقة الجمع'],['الطالبانِ حضرا','مطابقة المثنّى'],['الطالباتُ حضرْنَ','مطابقة جمع المؤنّث'],['حضرتِ الطالبتانِ','فعل مفرد قبل المثنّى'],['الفعل قبل الفاعل','يبقى مفردًا']],
+ r:[['___ اللاعبون إلى الملعب','دخلَ','دخلوا','دخلا'],['اللاعبون ___ إلى الملعب','دخلوا','دخلَ','دخلا'],['___ الطالبانِ الجائزة','نالَ','نالا','نالوا'],['الطالبانِ ___ الجائزة','نالا','نالَ','نالوا'],['___ المعلّماتُ الدرسَ','شرحتِ','شرحْنَ','شرحوا'],['المعلّماتُ ___ الدرسَ','شرحْنَ','شرحتِ','شرحوا'],['___ العمّالُ المصنعَ','يبني','يبنون','يبنيان'],['العمّالُ ___ المصنعَ','يبنون','يبني','يبنيان'],['___ الصديقانِ في الحديقة','جلسَ','جلسا','جلسوا'],['الأطفالُ ___ في الحديقة','لعبوا','لعبَ','لعبا']]},
+naib:{cat:'nahw',name:'نائب الفاعل',short:'نائب الفاعل',icon:'🎭',ins:'الكلمة الصحيحة',
+ rule:{h:'نائب الفاعل',p:'نائب الفاعل اسم مرفوع يحلّ محلّ الفاعل بعد حذفه، ويتقدّمه فعل مبنيّ للمجهول. يُبنى الماضي للمجهول بضمّ أوّله وكسر ما قبل آخره، والمضارع بضمّ أوّله وفتح ما قبل آخره.',ex:['رتّلَ القارئُ القرآنَ','رُتِّلَ القرآنُ','يُرتَّلُ القرآنُ']},
+ q:[
+  ['رُتِّلَ <u>القرآنُ</u> الكريم','ما إعراب الكلمة المسطّرة؟',['نائب فاعل مرفوع','فاعل مرفوع','مفعول به منصوب'],'حُذف الفاعل وحلّ القرآن محلّه.',1],
+  ['كيف يُبنى الفعل الماضي للمجهول؟','اختر الإجابة:',['بضمّ أوّله وكسر ما قبل آخره','بضمّ أوّله وفتح ما قبل آخره','بفتح أوّله وكسر ما قبل آخره'],'مثل: رُتِّلَ، أُدِّيَ، صُعِدَ.',1],
+  ['كيف يُبنى الفعل المضارع للمجهول؟','اختر الإجابة:',['بضمّ أوّله وفتح ما قبل آخره','بضمّ أوّله وكسر ما قبل آخره','بفتح أوّله وضمّ آخره'],'مثل: يُرتَّلُ، تُؤدّى، يُصعَدُ.',1],
+  ['أدّى الحجّاجُ الصلاةَ ← ___ الصلاةُ','ابنِ الفعل للمجهول:',['أُدِّيَتِ','أدّتِ','تُؤدّي'],'ضُمّ أوّله وكُسر ما قبل آخره.'],
+  ['يكتبُ الطالبُ الدرسَ ← ___ الدرسُ','ابنِ الفعل للمجهول:',['يُكتَبُ','يَكتُبُ','كُتِبَ'],'مضارع: ضُمّ أوّله وفُتح ما قبل آخره.'],
+  ['فُتِحَ ___ بهدوء','اختر نائب الفاعل الصحيح:',['البابُ','البابَ','البابِ'],'نائب الفاعل مرفوع.'],
+  ['<u>صُعِدَ</u> جبلُ عرفات','ما نوع الفعل المسطّر؟',['ماضٍ مبنيّ للمجهول','ماضٍ مبنيّ للمعلوم','مضارع مبنيّ للمجهول'],'ضُمّ أوّله وكُسر ما قبل آخره.',1],
+  ['أيّ الجمل الآتية فيها نائب فاعل؟','اختر الجملة:',['تُرفَعُ الأكفُّ بالدعاء','رفعَ الحاجُّ يديه','الحاجُّ يرفعُ يديه'],'«تُرفَع» مبنيّ للمجهول، و«الأكفّ» نائب فاعل.',1],
+  ['ماذا يُسمّى الفعل إذا حُذف فاعله؟','اختر الإجابة:',['مبنيًّا للمجهول','مبنيًّا للمعلوم','فعلًا معتلًّا'],'الفعل الذي ذُكر فاعله مبنيّ للمعلوم.',1],
+  ['يُكرَّمُ ___ المتفوّقون','اختر نائب الفاعل الصحيح:',['الطلابُ','الطلابَ','الطلابِ'],'نائب الفاعل مرفوع بالضمّة.']],
+ pairs:[['رُتِّلَ','ماضٍ مبنيّ للمجهول'],['يُرتَّلُ','مضارع مبنيّ للمجهول'],['رتّلَ القارئُ','مبنيّ للمعلوم'],['نائب الفاعل','اسم مرفوع'],['الماضي للمجهول','ضمّ أوّله وكسر ما قبل آخره'],['المضارع للمجهول','ضمّ أوّله وفتح ما قبل آخره']],
+ r:[['___ الدرسُ بوضوح','شُرِحَ','شَرَحَ','شَرَحُوا'],['___ الواجبُ في موعده','يُكتَبُ','يَكتُبُ','كَتَبَ'],['فُتِحَ ___','البابُ','البابَ','البابِ'],['كُرِّمَ ___ المتفوّقُ','الطالبُ','الطالبَ','الطالبِ'],['___ القرآنُ في رمضان','يُقرَأُ','يَقرَأُ','قَرَأَ'],['زُرِعَتِ ___','الأشجارُ','الأشجارَ','الأشجارِ'],['___ الكعبةُ المشرّفة','تُزارُ','تَزورُ','زارَ'],['أُدِّيَتِ ___','الصلاةُ','الصلاةَ','الصلاةِ'],['___ الماءُ من البئر','نُقِلَ','نَقَلَ','نَقَلُوا'],['يُحتَرَمُ ___','المعلّمُ','المعلّمَ','المعلّمِ']]},
+muthanna:{cat:'nahw',name:'إعراب المثنّى',short:'المثنّى',icon:'✌️',ins:'المثنّى الصحيح',
+ rule:{h:'إعراب المثنّى',p:'المثنّى اسم يدلّ على اثنين أو اثنتين بزيادة (ألف ونون) أو (ياء ونون) على مفرده. يُرفع المثنّى بالألف، ويُنصب ويُجرّ بالياء. والألف والياء من علامات الإعراب الفرعية.',ex:['زارَ الصديقانِ ← الألف','رأى كتابَيْنِ ← الياء','بدينارَيْنِ ← الياء']},
+ q:[
+  ['زارَ <u>الصديقانِ</u> المعرضَ','ما إعراب الكلمة المسطّرة؟',['فاعل مرفوع بالألف لأنّه مثنّى','فاعل مرفوع بالضمّة','مفعول به منصوب بالياء'],'المثنّى يُرفع بالألف.',1],
+  ['رأى محمدٌ ___ عن البرامج','اختر المثنّى الصحيح:',['كتابَيْنِ','كتابانِ','كتابونَ'],'مفعول به منصوب بالياء لأنّه مثنّى.'],
+  ['اشترى كلَّ كتابٍ ___','اختر المثنّى الصحيح:',['بدينارَيْنِ','بدينارانِ','بدينارونَ'],'مجرور بالباء وعلامة جرّه الياء.'],
+  ['فازتْ ___ في المسابقة','اختر المثنّى الصحيح:',['طالبتانِ','طالبتَيْنِ','طالبتونَ'],'فاعل مرفوع بالألف.'],
+  ['بمَ يُنصب المثنّى ويُجرّ؟','اختر الإجابة:',['بالياء','بالألف','بالفتحة والكسرة'],'هذه قاعدة الدرس.'],
+  ['تطيرُ الطائرةُ ___','اختر المثنّى الصحيح:',['بمحرّكَيْنِ','بمحرّكانِ','بمحرّكونَ'],'مجرور بالياء.'],
+  ['أثنى المعلّمُ على <u>الفائزَيْنِ</u>','ما إعراب الكلمة المسطّرة؟',['اسم مجرور بالياء لأنّه مثنّى','مفعول به منصوب بالياء','فاعل مرفوع بالألف'],'سبقها حرف الجرّ «على».',1],
+  ['ما مثنّى كلمة (معلّم) في حالة الرفع؟','اختر الإجابة:',['معلّمانِ','معلّمَيْنِ','معلّمونَ'],'المثنّى المرفوع ينتهي بألف ونون.'],
+  ['رافقَ ___ الطلابَ إلى المعرض','اختر المثنّى الصحيح:',['المعلّمانِ','المعلّمَيْنِ','المعلّمونِ'],'فاعل مرفوع بالألف.'],
+  ['الألف والياء في المثنّى من علامات الإعراب:','اختر الإجابة:',['الفرعية','الأصلية','المقدّرة'],'العلامات الأصلية هي الحركات.',1]],
+ pairs:[['الصديقانِ','مرفوع بالألف'],['رأيتُ الصديقَيْنِ','منصوب بالياء'],['بالصديقَيْنِ','مجرور بالياء'],['المثنّى','يدلّ على اثنين'],['الألف والياء','علامات فرعية'],['كتاب','كتابانِ']],
+ r:[['حضرَ ___','الطالبانِ','الطالبَيْنِ','الطالبونَ'],['شاهدتُ ___','الفيلمَيْنِ','الفيلمانِ','الأفلامَ'],['سلّمتُ على ___','المعلّمَيْنِ','المعلّمانِ','المعلّمونَ'],['___ مجتهدتانِ','الأختانِ','الأختَيْنِ','الأخواتُ'],['قرأتُ ___','قصّتَيْنِ','قصّتانِ','قِصصًا'],['في الحديقة ___ جميلتانِ','زهرتانِ','زهرتَيْنِ','زهراتٌ'],['ركبتُ مع ___','الصديقَيْنِ','الصديقانِ','الأصدقاءِ'],['فازَ ___ بالجائزة','الفريقانِ','الفريقَيْنِ','الفِرَقُ'],['أكلتُ ___','تفّاحتَيْنِ','تفّاحتانِ','تفّاحاتٌ'],['هذانِ ___ كبيرانِ','بابانِ','بابَيْنِ','أبوابٌ']]},
+jam:{cat:'nahw',name:'إعراب الجمع بأنواعه',short:'إعراب الجمع',icon:'👨‍👩‍👧‍👦',ins:'الجمع الصحيح',
+ rule:{h:'إعراب الجمع بأنواعه',p:'جمع المذكّر السالم يُرفع بالواو ويُنصب ويُجرّ بالياء. وجمع المؤنّث السالم يُرفع بالضمّة ويُنصب ويُجرّ بالكسرة. وجمع التكسير يُرفع بالضمّة ويُنصب بالفتحة ويُجرّ بالكسرة الظاهرة.',ex:['المواطنونَ / المواطنينَ','المعلّماتُ / المعلّماتِ','رجالُ / رجالَ / رجالِ']},
+ q:[
+  ['يتعاونُ <u>المواطنونَ</u> مع جهاز الأمن','ما إعراب الكلمة المسطّرة؟',['فاعل مرفوع بالواو لأنّه جمع مذكّر سالم','فاعل مرفوع بالضمّة','مفعول به منصوب بالياء'],'جمع المذكّر السالم يُرفع بالواو.',1],
+  ['يُدرّبُ رجالُ المطافئ ___ على مكافحة الحريق','اختر جمع المذكّر السالم المنصوب:',['المواطنينَ','المواطنونَ','المواطناتُ'],'مفعول به منصوب بالياء.'],
+  ['تُكرّمُ المديرةُ <u>المعلّماتِ</u>','ما علامة نصب الكلمة المسطّرة؟',['الكسرة لأنّه جمع مؤنّث سالم','الفتحة الظاهرة','الياء'],'جمع المؤنّث السالم يُنصب بالكسرة.',1],
+  ['تُشجّعُ ___ الطالباتِ','اختر الفاعل الصحيح:',['المعلّماتُ','المعلّماتِ','المعلّماتَ'],'فاعل مرفوع بالضمّة.'],
+  ['ما نوع الجمع في كلمة (رجال)؟','اختر الإجابة:',['جمع تكسير','جمع مذكّر سالم','جمع مؤنّث سالم'],'تغيّرت صورة مفرده (رجل).'],
+  ['لماذا سُمّي الجمع السالم سالمًا؟','اختر الإجابة:',['لأنّ مفرده سلم من التغيير بعد جمعه','لأنّه يدلّ على المذكّر فقط','لأنّه يُرفع بالواو'],'لم تتغيّر حروف المفرد.',1],
+  ['يُقدّرُ المواطنونَ <u>رجالَ</u> الأمن','ما علامة نصب الكلمة المسطّرة؟',['الفتحة الظاهرة','الياء','الكسرة'],'جمع التكسير يُنصب بالفتحة.',1],
+  ['ما جمع التكسير لكلمة (نَجْم)؟','اختر الإجابة:',['نُجوم','نَجْمات','نَجْمون'],'تغيّرت صورة المفرد.'],
+  ['جمع المذكّر السالم يُجرّ بـ:','اختر الإجابة:',['الياء','الكسرة','الواو'],'يُنصب ويُجرّ بالياء.'],
+  ['للمعلّماتِ فضلٌ كبير','ما علامة جرّ كلمة (المعلّمات)؟',['الكسرة','الياء','الفتحة'],'جمع المؤنّث السالم يُجرّ بالكسرة.']],
+ pairs:[['المهندسونَ','مرفوع بالواو'],['المهندسينَ','منصوب أو مجرور بالياء'],['المعلّماتِ','منصوب أو مجرور بالكسرة'],['جمع التكسير','تتغيّر صورة مفرده'],['عَلَم','أعلام'],['السالم','سلم مفرده من التغيير']],
+ r:[['حضرَ ___','المهندسونَ','المهندسينَ','المهندسُ'],['شكرتُ ___','الفلّاحينَ','الفلّاحونَ','الفلّاحَ'],['سلّمتُ على ___','المعلّمينَ','المعلّمونَ','المعلّمَ'],['___ مجتهداتٌ','الطالباتُ','الطالباتِ','الطالبةُ'],['رأيتُ ___ في المستشفى','الطبيباتِ','الطبيباتَ','الطبيبةَ'],['___ الأمنِ يحمون الوطن','رجالُ','رجالَ','رجلُ'],['رأيتُ ___ في السماء','نجومًا','نجومٌ','نجمًا'],['أُحبُّ ___ المخلصين','الأصدقاءَ','الأصدقاءُ','الصديقَ'],['صعدتُ على ___ العالية','الجبالِ','الجبالَ','الجبلِ'],['يعملُ ___ في المصنع','العمّالُ','العمّالَ','العاملُ']]},
+alif:{cat:'imla',name:'الألف الليّنة',short:'الألف الليّنة',icon:'🪄',ins:'الكتابة الصحيحة',
+ rule:{h:'الألف الليّنة',p:'تُكتب قائمة (ا) في آخر الماضي الثلاثي الذي أصل ألفه واو (دعا – يدعو)، وفي بعض الأسماء الثلاثية (سنا – علا)، وإذا سُبقت بياء (هدايا). وتُكتب مقصورة (ى) في آخر الماضي الثلاثي الذي أصل ألفه ياء (رمى – يرمي)، وفيما زاد على ثلاثة أحرف (أملى – مستشفى)، وفي بعض الحروف (إلى – على – بلى).',ex:['دعا ← يدعو','رمى ← يرمي','مستشفى / هدايا']},
+ q:[
+  ['ما الفعل الماضي من (يدعو)؟','اختر الكتابة الصحيحة:',['دعا','دعى','دعو'],'أصل الألف واو، فتُكتب قائمة.'],
+  ['ما الفعل الماضي من (يرمي)؟','اختر الكتابة الصحيحة:',['رمى','رما','رمي'],'أصل الألف ياء، فتُكتب مقصورة.'],
+  ['ذهبتُ إلى ___ لزيارة المريض','اختر الكتابة الصحيحة:',['المستشفى','المستشفا','المستشفي'],'اسم زاد على ثلاثة أحرف، فتُكتب مقصورة.'],
+  ['ما جمع كلمة (هديّة)؟','اختر الكتابة الصحيحة:',['هدايا','هدايى','هديا'],'سُبقت الألف بياء فكُتبت قائمة.'],
+  ['جلستُ ___ الكرسيّ','اختر الكتابة الصحيحة:',['على','علا','علي'],'«على» حرف، تُكتب ألفه مقصورة.'],
+  ['ما الفعل الماضي من (يعفو)؟','اختر الكتابة الصحيحة:',['عفا','عفى','عفو'],'أصل الألف واو.'],
+  ['لماذا كُتبت الألف قائمة في (نما)؟','اختر السبب:',['لأنّ أصلها واو (ينمو)','لأنّ أصلها ياء','لأنّ الكلمة حرف'],'الفعل الثلاثي الواويّ تُكتب ألفه قائمة.',1],
+  ['لماذا كُتبت الألف مقصورة في (استولى)؟','اختر السبب:',['لأنّ الفعل زاد على ثلاثة أحرف','لأنّ أصلها واو','لأنّ الكلمة حرف'],'ما زاد على ثلاثة أحرف تُكتب ألفه مقصورة.',1],
+  ['___ القاضي بالعدل','اختر الكتابة الصحيحة:',['قضى','قضا','قضي'],'أصلها ياء (يقضي).'],
+  ['للمربّع أربعُ ___','اختر الكتابة الصحيحة:',['زوايا','زوايى','زواية'],'سُبقت الألف بياء فكُتبت قائمة.']],
+ pairs:[['دعا','أصل ألفه واو'],['رمى','أصل ألفه ياء'],['مستشفى','اسم زاد على ثلاثة'],['هدايا','ألف مسبوقة بياء'],['إلى','حرف'],['سنا','اسم ثلاثي']],
+ r:[['___ المسلمُ ربَّه','دعا','دعى','دعو'],['___ اللاعبُ الكرةَ','رمى','رما','رمي'],['ذهبتُ إلى ___','المستشفى','المستشفا','المستشفي'],['وزّعتُ ___ على الأطفال','الهدايا','الهدايى','الهديا'],['جلستُ ___ الكرسيّ','على','علا','علي'],['___ الزرعُ في الحقل','نما','نمى','نمو'],['___ القاضي بالعدل','قضى','قضا','قضي'],['___ المعلّمُ الدرسَ','أملى','أملا','أملي'],['___ اللهُ عن المخطئ','عفا','عفى','عفو'],['أضاء ___ القمرِ الطريقَ','سنا','سنى','سني']]},
+hamzaM:{cat:'imla',name:'الهمزة المتوسّطة',short:'الهمزة المتوسّطة',icon:'🪶',ins:'الكتابة الصحيحة',
+ rule:{h:'الهمزة المتوسّطة',p:'كتابة الهمزة في وسط الكلمة تعتمد على حركتها وحركة الحرف الذي قبلها، وتُكتب على الحرف الذي يناسب الحركة الأقوى. ترتيب الحركات حسب القوّة: الكسرة (ئ)، ثمّ الضمّة (ؤ)، ثمّ الفتحة (أ)، ثمّ السكون.',ex:['سُئِل ← ئ','مُؤْمن ← ؤ','سَأَل ← أ']},
+ q:[
+  ['لا ___ الكريمُ من طالب الحاجات','اختر الكتابة الصحيحة:',['يسأم','يسئم','يسؤم'],'مفتوحة وقبلها ساكن، والفتحة أقوى، فتُكتب على الألف.'],
+  ['طيّبُ القلب يعطف على ___','اختر الكتابة الصحيحة:',['البائسين','البأسين','البؤسين'],'مكسورة، والكسرة أقوى، فتُكتب على الياء (النبرة).'],
+  ['تظهر ___ المسجد شامخةً من بعيد','اختر الكتابة الصحيحة:',['مِئذنة','مِأذنة','مِؤذنة'],'ساكنة وقبلها كسر، والكسرة أقوى.'],
+  ['___ القلبُ بذكر الله','اختر الكتابة الصحيحة:',['يطمئنّ','يطمأنّ','يطمؤنّ'],'مكسورة، فتُكتب على الياء.'],
+  ['استقبل الأميرُ ___ بالعيد','اختر الكتابة الصحيحة:',['المهنّئين','المهنّأين','المهنّؤين'],'مكسورة، فتُكتب على الياء.'],
+  ['ما ترتيب الحركات حسب القوّة؟','اختر الإجابة:',['الكسرة ثم الضمّة ثم الفتحة ثم السكون','الضمّة ثم الكسرة ثم الفتحة ثم السكون','الفتحة ثم الضمّة ثم الكسرة ثم السكون'],'هذه قاعدة الدرس.',1],
+  ['تُكتب الهمزة المتوسّطة على الواو إذا كانت الحركة الأقوى:','اختر الإجابة:',['الضمّة','الكسرة','الفتحة'],'الضمّة يناسبها حرف الواو.'],
+  ['___ المعلّمُ الطلابَ','اختر الكتابة الصحيحة:',['سَأَلَ','سَئَلَ','سَؤَلَ'],'مفتوحة وقبلها فتح، فتُكتب على الألف.'],
+  ['___ الطالبُ عن الدرس','اختر الكتابة الصحيحة:',['سُئِلَ','سُؤِلَ','سُأِلَ'],'مكسورة وقبلها ضمّ، والكسرة أقوى.'],
+  ['هذا الولدُ ___ مع والديه','اختر الكتابة الصحيحة:',['مُؤدّب','مُئدّب','مُأدّب'],'مفتوحة وقبلها ضمّ، والضمّة أقوى.']],
+ pairs:[['سُئِل','الكسرة أقوى ← ئ'],['مُؤْمن','الضمّة أقوى ← ؤ'],['سَأَل','الفتحة ← أ'],['أقوى الحركات','الكسرة'],['أضعف الحركات','السكون'],['مِئْذنة','ساكنة بعد كسر']],
+ r:[['___ المعلّمُ عن الدرس','سأل','سئل','سؤل'],['تظهر ___ المسجد','مئذنة','مأذنة','مؤذنة'],['___ القلبُ بذكر الله','يطمئنّ','يطمأنّ','يطمؤنّ'],['المسلمُ ___ بالله','مؤمن','مئمن','مأمن'],['شربتُ ___ من الماء','كأسًا','كئسًا','كؤسًا'],['___ الطالبُ عن الدرس','سُئل','سُؤل','سُأل'],['هذا ___ قديم','بئر','بأر','بؤر'],['هذا الولد ___','مؤدّب','مئدّب','مأدّب'],['كانت ___ سهلة','الأسئلة','الأسألة','الأسؤلة'],['جاء ___ النادي','رئيس','رأيس','رؤيس']]},
+hamzaMT:{cat:'imla',name:'الهمزة المتوسّطة والمتطرّفة',short:'المتوسّطة والمتطرّفة',icon:'✒️',ins:'الكتابة الصحيحة',
+ rule:{h:'الهمزة المتوسّطة والمتطرّفة',p:'المتوسّطة تُكتب على ما يناسب الحركة الأقوى من حركتها وحركة ما قبلها. والمتطرّفة تُكتب على حرف يناسب حركة ما قبلها: (أ) بعد الفتح، و(ؤ) بعد الضمّ، و(ئ) بعد الكسر، وعلى السطر إذا سبقها ساكن أو حرف مدّ.',ex:['قرأ ← بعد فتح','شاطئ ← بعد كسر','سماء / دفء ← على السطر']},
+ q:[
+  ['ما ضدّ كلمة (حسنة)؟','اختر الكتابة الصحيحة:',['سيّئة','سيّأة','سيّؤة'],'مفتوحة وقبلها ياء، فتُكتب على النبرة.'],
+  ['ما ضدّ كلمة (فارغة)؟','اختر الكتابة الصحيحة:',['ممتلئة','ممتلأة','ممتلؤة'],'مفتوحة وقبلها كسر، والكسرة أقوى.'],
+  ['ما مفرد كلمة (خطايا)؟','اختر الكتابة الصحيحة:',['خطيئة','خطيأة','خطيؤة'],'مفتوحة وقبلها ياء ساكنة، فتُكتب على النبرة.'],
+  ['ما جمع كلمة (قبيلة)؟','اختر الكتابة الصحيحة:',['قبائل','قبأل','قباءل'],'مكسورة، فتُكتب على الياء.'],
+  ['ما مفرد كلمة (أسئلة)؟','اختر الكتابة الصحيحة:',['سؤال','سئال','سأال'],'مفتوحة وقبلها ضمّ، فتُكتب على الواو.'],
+  ['ما مفرد كلمة (آبار)؟','اختر الكتابة الصحيحة:',['بئر','بأر','بؤر'],'ساكنة وقبلها كسر.'],
+  ['ما ضدّ كلمة (فضائل)؟','اختر الكتابة الصحيحة:',['رذائل','رذأل','رذاءل'],'مكسورة، فتُكتب على الياء.'],
+  ['﴿عن <u>شيءٍ</u> منه نفسًا﴾','ما نوع الهمزة في الكلمة المسطّرة؟',['متطرّفة قبلها ساكن','متوسّطة مكسورة','متطرّفة قبلها حرف مدّ'],'الياء في «شيء» ساكنة، فكُتبت الهمزة على السطر.',1],
+  ['﴿يُؤتيه من يشاء﴾','ما نوع الهمزة في (يُؤتيه)؟',['متوسّطة ساكنة مضموم ما قبلها','متطرّفة قبلها ساكن','متوسّطة مكسورة'],'الهمزة ساكنة وقبلها ضمّ، فكُتبت على الواو.',1],
+  ['﴿مَن يشاءُ﴾','ما نوع الهمزة في (يشاء)؟',['متطرّفة قبلها حرف مدّ','متطرّفة قبلها ساكن','متوسّطة مفتوحة'],'قبلها ألف مدّ، فكُتبت على السطر.',1]],
+ pairs:[['شيء','متطرّفة قبلها ساكن'],['يشاء','متطرّفة قبلها مدّ'],['مُؤجَّلًا','مفتوحة بعد ضمّ'],['يُؤتيه','ساكنة بعد ضمّ'],['استأجرت','ساكنة بعد فتح'],['شاطئ','متطرّفة بعد كسر']],
+ r:[['جلستُ على ___ البحر','شاطئ','شاطأ','شاطؤ'],['نزل المطرُ من ___','السماء','السماأ','السمائ'],['أحبُّ ___ الشمس','دفء','دفأ','دفئ'],['___ الطالبُ القصّةَ','قرأ','قرئ','قرؤ'],['كانت الكأسُ ___','ممتلئة','ممتلأة','ممتلؤة'],['هذا ___ صعب','سؤال','سئال','سأال'],['اشتريتُ ___ جميلًا','شيئًا','شيأً','شيؤًا'],['هذا ___ ماهر','قارئ','قارأ','قارؤ'],['كان ___ يملأ المكان','الهدوء','الهدوأ','الهدوئ'],['قرأتُ عن ___ المسلمين','علماء','علماأ','علمائ']]},
+hamzaT:{cat:'imla',name:'الهمزة المتطرّفة',short:'الهمزة المتطرّفة',icon:'🔚',ins:'الكتابة الصحيحة',
+ rule:{h:'الهمزة المتطرّفة',p:'تُكتب الهمزة في آخر الكلمة على حرف يناسب حركة ما قبلها: على الألف بعد الفتح (بدأ)، وعلى الواو بعد الضمّ (التباطؤ)، وعلى الياء بعد الكسر (شاطئ)، وعلى السطر بعد الساكن (دفء) أو حرف المدّ (سماء).',ex:['بدأ / يبدأ','شاطئ / بادئ','دفء / سماء']},
+ q:[
+  ['ما الفعل الماضي من (يبدأ)؟','اختر الكتابة الصحيحة:',['بدأ','بدئ','بدؤ'],'ما قبلها مفتوح، فتُكتب على الألف.'],
+  ['ما اسم الفاعل من (قرأ)؟','اختر الكتابة الصحيحة:',['قارئ','قارأ','قارؤ'],'ما قبلها مكسور، فتُكتب على الياء.'],
+  ['ما جمع كلمة (شاطئ)؟','اختر الكتابة الصحيحة:',['شواطئ','شواطأ','شواطؤ'],'ما قبلها مكسور.'],
+  ['ما جمع كلمة (مرفأ)؟','اختر الكتابة الصحيحة:',['مرافئ','مرافأ','مرافؤ'],'ما قبلها مكسور.'],
+  ['ما جمع كلمة (ميناء)؟','اختر الكتابة الصحيحة:',['موانئ','مواناء','موانأ'],'ما قبلها مكسور.'],
+  ['تُكتب الهمزة المتطرّفة على السطر إذا سبقها:','اختر الإجابة:',['حرف ساكن أو حرف مدّ','حرف مفتوح','حرف مكسور'],'مثل: دفء، سماء.',1],
+  ['كُتبت الهمزة على الواو في (التباطؤ) لأنّ:','اختر الإجابة:',['ما قبلها مضموم','ما قبلها مكسور','ما قبلها ساكن'],'الضمّة يناسبها حرف الواو.',1],
+  ['العطشانُ ___ في الصحراء','اختر الكتابة الصحيحة:',['يظمأ','يظمئ','يظمؤ'],'ما قبلها مفتوح.'],
+  ['ما اسم الفاعل من (نشأ)؟','اختر الكتابة الصحيحة:',['ناشئ','ناشأ','ناشؤ'],'ما قبلها مكسور.'],
+  ['ما الفعل الماضي من (يملأ)؟','اختر الكتابة الصحيحة:',['ملأ','ملئ','ملؤ'],'ما قبلها مفتوح.']],
+ pairs:[['بدأ','بعد فتح ← أ'],['شاطئ','بعد كسر ← ئ'],['التباطؤ','بعد ضمّ ← ؤ'],['دفء','بعد ساكن ← على السطر'],['سماء','بعد مدّ ← على السطر'],['مَلْجَأ','ملاجئ']],
+ r:[['___ العامُ الدراسيّ','بدأ','بدئ','بدؤ'],['هذا ___ متميّز','قارئ','قارأ','قارؤ'],['ترسو السفن في ___','الموانئ','الموانأ','المواناء'],['___ البحرين جميلة','شواطئ','شواطأ','شواطؤ'],['في الشتاء أحتاج إلى ___','الدفء','الدفأ','الدفئ'],['___ الطفلُ الكأسَ ماءً','ملأ','ملئ','ملؤ'],['النجوم تزيّن ___','السماء','السماأ','السمائ'],['هذا ___ للأيتام','ملجأ','ملجئ','ملجؤ'],['___ العطشانُ في الصحراء','يظمأ','يظمئ','يظمؤ'],['الشابُّ ___ في بيئة طيّبة','ناشئ','ناشأ','ناشؤ']]},
+wasl:{cat:'imla',name:'همزة الوصل وهمزة القطع',short:'الوصل والقطع',icon:'🔗',ins:'الكتابة الصحيحة',
+ rule:{h:'همزة الوصل وهمزة القطع',p:'همزة القطع تُنطق وتُكتب في أوّل الكلام ووسطه (أ – إ)، مثل: أكرمَ، أقبِلْ، إسلام. وهمزة الوصل تُنطق في أوّل الكلام وتسقط في وسطه ولا تُكتب عليها همزة (ا)، ومن مواضعها: أمر الفعل الثلاثي (اقرأْ)، وماضي الخماسي والسداسي وأمرهما ومصدرهما (انطلقَ، استخرجَ)، و(أل) التعريف.',ex:['أكرمَ ← أكرِمْ (قطع)','قرأَ ← اقرأْ (وصل)','استخرجَ (وصل)']},
+ q:[
+  ['ما نوع الهمزة في (اقرأْ)؟','اختر الإجابة:',['همزة وصل','همزة قطع','همزة متوسّطة'],'أمر الفعل الثلاثي يبدأ بهمزة وصل.'],
+  ['ما نوع الهمزة في (أكرِمْ ضيفك)؟','اختر الإجابة:',['همزة قطع','همزة وصل','همزة متطرّفة'],'أمر الفعل الرباعي يبدأ بهمزة قطع.'],
+  ['ما فعل الأمر من (أقبلَ)؟','اختر الكتابة الصحيحة:',['أقبِلْ','اقبِلْ','إقبِلْ'],'أمر الرباعي همزته همزة قطع مفتوحة.'],
+  ['ما فعل الأمر من (جلسَ)؟','اختر الكتابة الصحيحة:',['اجلسْ','أجلسْ','إجلسْ'],'أمر الثلاثي همزته همزة وصل.'],
+  ['ما الماضي من (يستخرج)؟','اختر الكتابة الصحيحة:',['استخرجَ','أستخرجَ','إستخرجَ'],'ماضي السداسي يبدأ بهمزة وصل.'],
+  ['ما نوع الهمزة في (انطلقَ)؟','اختر الإجابة:',['همزة وصل','همزة قطع','همزة متوسّطة'],'ماضي الخماسي يبدأ بهمزة وصل.'],
+  ['ما الماضي من (يُسرع)؟','اختر الكتابة الصحيحة:',['أسرعَ','اسرعَ','إسرعَ'],'ماضي الرباعي يبدأ بهمزة قطع.'],
+  ['همزة (أل) التعريف همزة:','اختر الإجابة:',['وصل','قطع','متطرّفة'],'تُنطق في أوّل الكلام وتسقط في وسطه.'],
+  ['أيّ الكلمات الآتية تبدأ بهمزة قطع؟','اختر الكلمة:',['إسلام','استماع','انتباه'],'«إسلام» مصدر الرباعي «أسلم».'],
+  ['ما فعل الأمر من (سمعَ)؟','اختر الكتابة الصحيحة:',['اسمعْ','أسمعْ','إسمعْ'],'أمر الثلاثي همزته همزة وصل.']],
+ pairs:[['اقرأْ','أمر الثلاثي ← وصل'],['أكرِمْ','أمر الرباعي ← قطع'],['استخرجَ','ماضي السداسي ← وصل'],['انطلقَ','ماضي الخماسي ← وصل'],['أسرعَ','ماضي الرباعي ← قطع'],['البيت','أل التعريف ← وصل']],
+ r:[['يا أحمدُ، ___ القرآن','اقرأْ','أقرأْ','إقرأْ'],['___ الضيفَ يا بُنيّ','أكرِمْ','اكرِمْ','إكرِمْ'],['___ الطلابُ إلى الرحلة','انطلقَ','أنطلقَ','إنطلقَ'],['___ العلماءُ النفطَ','استخرجَ','أستخرجَ','إستخرجَ'],['يا سعيدُ، ___ على مقعدك','اجلسْ','أجلسْ','إجلسْ'],['___ الطالبُ في الحلّ','أسرعَ','اسرعَ','إسرعَ'],['يا ولدي، ___ النصيحة','اسمعْ','أسمعْ','إسمعْ'],['___ المعلّمُ الطالبَ المتفوّق','أكرمَ','اكرمَ','إكرمَ'],['أحبُّ ___ إلى القرآن','الاستماعَ','الإستماعَ','الأستماعَ'],['يا فاطمةُ، ___ الدرسَ','اكتبي','أكتبي','إكتبي']]},
+ibn:{cat:'imla',name:'حذف الألف من كلمتي ابن وابنة',short:'ابن وابنة',icon:'👨‍👦',ins:'الكتابة الصحيحة',
+ rule:{h:'حذف الألف من ابن وابنة',p:'تُحذف الألف من كلمة (ابن) إذا وقعت بين اسمين الثاني منهما أبٌ للأوّل، مثل: عمرو بن العاص، خالد بن الوليد. وتُحذف من (ابن) و(ابنة) إذا سبقتهما (يا) النداء، مثل: يا بنَ الجرّاح، يا بنةَ محمد. وتبقى الألف في غير ذلك.',ex:['خالدُ بنُ الوليد','يا بنَ الخطّاب','يا بنةَ الصدّيق']},
+ q:[
+  ['خالدُ ___ الوليد','اختر الكتابة الصحيحة:',['بنُ','ابنُ','إبنُ'],'وقعت بين اسمين الثاني أب للأوّل.'],
+  ['يا ___ الخطّاب','اختر الكتابة الصحيحة:',['بنَ','ابنَ','إبنَ'],'سبقتها ياء النداء.'],
+  ['يا ___ الصدّيق','اختر الكتابة الصحيحة:',['بنةَ','ابنةَ','إبنةَ'],'«ابنة» تُحذف ألفها بعد ياء النداء.'],
+  ['___ سينا طبيبٌ مشهور','اختر الكتابة الصحيحة:',['ابنُ','بنُ','إبنُ'],'لم تقع بين اسمين، فتبقى الألف.'],
+  ['هذا ___ عمّي','اختر الكتابة الصحيحة:',['ابنُ','بنُ','إبنُ'],'لم تقع بين اسمين الثاني أب للأوّل.'],
+  ['متى تُحذف الألف من (ابن) بين اسمين؟','اختر الإجابة:',['إذا كان الاسم الثاني أبًا للأوّل','إذا كان الاسم الثاني أخًا للأوّل','في كلّ الأحوال'],'هذه قاعدة الدرس.',1],
+  ['عبدُ الملك ___ مروان','اختر الكتابة الصحيحة:',['بنُ','ابنُ','إبنُ'],'مروان أبو عبد الملك.'],
+  ['عمرُ ___ الخطّاب','اختر الكتابة الصحيحة:',['بنُ','ابنُ','إبنُ'],'وقعت بين اسمين الثاني أب للأوّل.'],
+  ['لماذا حُذفت الألف في (يا بنَ الزبير)؟','اختر السبب:',['لأنّها سُبقت بياء النداء','لأنّها في أوّل السطر','لأنّها بعد اسم مؤنّث'],'ياء النداء تحذف ألف ابن وابنة.',1],
+  ['___ خلدون مؤرّخ عربيّ','اختر الكتابة الصحيحة:',['ابنُ','بنُ','إبنُ'],'لم تقع بين اسمين، فتبقى الألف.']],
+ pairs:[['عمرو بن العاص','بين اسمين: الثاني أب'],['يا بنَ الجرّاح','بعد ياء النداء'],['يا بنةَ محمد','ابنة بعد النداء'],['ابن سينا','في أوّل الكلام'],['ابن عمّي','تبقى الألف'],['عبد الملك بن مروان','مروان أبو عبد الملك']],
+ r:[['خالدُ ___ الوليد','بنُ','ابنُ','إبنُ'],['يا ___ الخطّاب','بنَ','ابنَ','إبنَ'],['عمرُو ___ العاص','بنُ','ابنُ','إبنُ'],['يا ___ الصدّيق','بنةَ','ابنةَ','إبنةَ'],['___ سينا طبيبٌ مشهور','ابنُ','بنُ','إبنُ'],['هذا ___ عمّي','ابنُ','بنُ','إبنُ'],['عبدُ الله ___ الزبير','بنُ','ابنُ','إبنُ'],['سعدُ ___ أبي وقّاص','بنُ','ابنُ','إبنُ'],['يا ___ عمّي، تعالَ','بنَ','ابنَ','إبنَ'],['___ خلدون مؤرّخ عربيّ','ابنُ','بنُ','إبنُ']]}
+};
+const GAP=s=>s.replace('___','<span class="gap">؟</span>');
+function qFromArr(a,tag){return {s:GAP(a[0]),ask:a[1],o:a[2],a:0,why:a[3],two:a[4]?1:0,tag}}
+function roundsFor(id){
+ const w=WDATA[id];
+ return w.r.map(x=>({right:x[1],wrong:[x[2],x[3]],prompt:GAP(x[0]),plain:x[0].replace('___',x[1]),ins:w.ins}));
+}
+function verbRounds(c){
+ return VERBS.map(v=>{
+  const right=v[c];let wrong=[...new Set(v.slice(0,3))].filter(x=>x!==right);
+  if(wrong.length<2)wrong.push(v[0].replace(/ى$/,'ي'));
+  const tool=TOOLS[c][Math.floor(Math.random()*TOOLS[c].length)];
+  const pr=(tool?tool+' ':'')+'___ '+v[3];
+  return {right,wrong:wrong.slice(0,2),prompt:GAP(pr),plain:pr.replace('___',right),ins:'الفعل '+CASEN[c]+' الصحيح'};
+ });
+}
+/* ترتيب العوالم كما في فهرس الكتاب */
+const ORDER_N=['maadi','rafa','nasb','jazm','amr','khamsa','ifrad','naib','muthanna','jam'];
+const ORDER_I=['alif','hamzaM','hamzaMT','hamzaT','wasl','ibn'];
+function buildWorlds(){
+ const W=[];
+ ORDER_N.forEach(id=>{
+  if(id==='rafa'||id==='nasb'||id==='jazm'){const k=['rafa','nasb','jazm'].indexOf(id),Ls=LESSONS[k];
+   W.push({id,cat:'nahw',name:Ls.name,short:Ls.short,icon:Ls.icon,rule:Ls.rule,q:Ls.q.map(q=>({...q,tag:Ls.short})),pairs:PAIRS[k],rounds:()=>verbRounds(k)})}
+  else{const d=WDATA[id];W.push({id,cat:d.cat,name:d.name,short:d.short,icon:d.icon,rule:d.rule,q:d.q.map(a=>qFromArr(a,d.short)),pairs:d.pairs,rounds:()=>roundsFor(id)})}
+ });
+ W.push({id:'bossN',cat:'nahw',mix:1,name:'زعيم قلعة النحو',short:'زعيم النحو',icon:'👑'});
+ ORDER_I.forEach(id=>{const d=WDATA[id];W.push({id,cat:d.cat,name:d.name,short:d.short,icon:d.icon,rule:d.rule,q:d.q.map(a=>qFromArr(a,d.short)),pairs:d.pairs,rounds:()=>roundsFor(id)})});
+ W.push({id:'bossI',cat:'imla',mix:1,name:'زعيم واحة الإملاء',short:'زعيم الإملاء',icon:'👑'});
+ return W;
+}
+
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const SHAPES=['▲','●','■'], COLORS=['o','p',''];
+const app=document.getElementById('app');
+const HDR='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAD8BN8DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACmZps8ywQPK5wqjJry3WPiLe3Nw9ppkWMkqGxyamUktzSnSlU+E9Jj1S2lvWtEkVpVGSAat5NeTaHpmrWV4dSlmYXEo5Unmujl1C5iAD3s5mbooPSnF3QqkVGVk7nbg80tcrf+L7fR7SMyo8j4+Y4qDT/iHpl7JskzDnu1FxKEmrpHYZpRWUNWja6jEbK8Mg4YetaQdSxUEEjqKZIbxv2ZG7GcU/PFc22oqviEhnw2dmPUV0O4BCxPAGaAIxdRm4MGfnAyRU9cpZamsmvyqww2cZ9R2rqWYKu49AKSd9gaG+YvmbCw3HtUg6Vztrex3XiVQrHcqMMV0G4DvQgH0VQh1FZbySED5Yxy1JJrForYEgbHXFMC9mlqnHqdpMD5cylgMkZrHbxppsV01vPII2U45NJtIqMXLRI6ImlBrk59eki1LzoJlmtHUYXPStrTdXg1GMFTtc/wAJpk2NMUtNBp1ABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUU13CIXboBk0AOorFj8VaRLd/ZUucz5xsxzVu91iy09kW5mCs/wB0dzQBforIvPEul2Co1zceWr/dJHWnSeItNishdvNiA9GxQBq0VUsNStNTt/PtJVkj9RUEmu2EV6LN5SJyfu4oA0qSq15qNrYRebczLGvuayv+Ew0jP+uYL/e28UAb9FZ7azYpYi9MwMB/iFUk8YaNIpaO53AdSozQBu0Vm2OvabqLlLa5VnHVc81Zu763sYTLcyrGnqTQBYzS1gf8Jfo+4AzkAnAYjitU6hbC0+1CQNCB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VYb92fzIugB4rVFGKWgBMUYpaKADFFFFACYHpRgegpaKAEwPQUuKKKACkZVb7yg/UUtFADdibcbRj0xTZIIpV2yRoy+hXNSUUARrBCgAWJBjphelP2ilooAKKKKACimlsdSKUdKAFooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoopDQBBe3SWdlLcSHCIuSa8c1qwu9YlfXbUgqrZAB5GK9U8S2b3/h29tYyQ8keBivCY7nUrV5NPieQAnaUHesa0ktGj0MDScryjKzR6N4KXW9SMd3dXR+zIcAetdncy21jMZWQF2GSfaszwbbvY6BbwXB2yNyFNN1VmuXuyP+WPyn3FaQXuo5K8rzZV0/xIh8XzWbxFUuVyjn2FdhmvI/G1wNJ1DRZ4flkkUtke1elaNqceoaRFdbwfkyxoUruwSpNQU+jMzxb4kGgRQlSCzsMj2rc069S/0+G5jOVdQa8P8c60dX119jZii+VRXZfDDXWms30udv8AVnMZPfNYxrqVVwPQrZbOlhI4h9dz0G7uUtLSW4kOFRck1zfhPxQNbmuopCNyN8gHpWd8Sdd+w6Z9gjbEk45+lec+EdZbR9cilJ+Rztb8aKldRmoiw2WyrYaVbsfQVchrXi9NO8QW+nqQdzYf2robvUorbSmviw2+XuX8q+fNT1Sa+1qa/dvnaTcPanXrKmkTl2XyxcpLokfSCsHRWHIIzWL4p1pdD0SW6yPN6Rg9zUHg3WBq+hRSMw3oMMK8/wDiXrZvL9bFG/dxHOPeqqVVGHMZYXByrYlUT0jwtrI1rRYbhiDKR84HrWw7hELt0UZNeQ/DPXDa37WEjfJJyM+td74z1gaRoMsisA7jaoop1VKHOGKwcqOIdE8o8Z3T6lrE10iEQLIYw3qawrTUJ7GXfbsVb1rsWtUk+Hj3Egy7TmQH3rhxGxfCqWx6VxYhNSUodT6HLJwlSlTrLSJvpqM2qIG1KVjbp2Hc13eg61bXsmm2tumIrZApb0rivCV7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';
+let player='',useTimer=true,L=null,qs=[],qi=0,correct=0,points=0,streak=0,bestStreak=0,res=[],order=[],answered=false,tmr=null,tLeft=0,best={};
+const TIME=25;
+try{best=JSON.parse(localStorage.getItem('mu3tal-best')||'{}')}catch(e){}
+try{player=localStorage.getItem('mu3tal-player')||''}catch(e){}
+
+/* ===== حفظ النتائج: مخزن مشترك عند فتح الرابط، وإلا على هذا الجهاز ===== */
+let DB=null,USER=null,isTeacher=false,dbReady=false;
+const LOCAL_KEY='mu3tal-results';
+function localAll(){try{return JSON.parse(localStorage.getItem(LOCAL_KEY)||'[]')}catch(e){return[]}}
+function localAdd(r){try{const a=localAll();a.push(r);localStorage.setItem(LOCAL_KEY,JSON.stringify(a))}catch(e){}}
+async function saveResult(r){
+ if(DB){try{await DB.collection('results').add(r);return 'shared'}catch(e){}}
+ localAdd(r);return 'local';
+}
+async function loadResults(){
+ if(DB){try{const s=await DB.collection('results').orderBy('at','desc').limit(500).get();return s.docs.map(d=>({id:d.id,...d.data()}))}catch(e){}}
+ return localAll().slice().reverse();
+}
+(async()=>{
+ if(!window.claude||!claude.use){dbReady=true;if(location.hash==='#results')setTimeout(pinGate,0);return}
+ const [d,u]=await Promise.all([claude.use('db'),claude.use('user')]);
+ DB=d;USER=u;dbReady=true;
+ try{isTeacher=!!(u&&(u.isOwner()||u.canEdit()))}catch(e){}
+ if(location.hash==='#results')pinGate();
+})();
+function showTeacherBtn(){return isTeacher||(dbReady&&!DB)}
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+let ac;function beep(kind){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const t=ac.currentTime;
+ const seq=kind==='ok'?[660,880,1100]:kind==='no'?[240,180]:kind==='win'?[523,659,784,1046]:[440];
+ seq.forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=f;o.connect(g);g.connect(ac.destination);const s=t+i*.09;g.gain.setValueAtTime(.16,s);g.gain.exponentialRampToValueAtTime(.001,s+.22);o.start(s);o.stop(s+.24)})}catch(e){}}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function home(){
+ stopT();
+ const picker=STUDENTS.length
+  ?`<select id="pl"><option value="">— اختر اسمك —</option>${STUDENTS.map(n=>`<option${n===player?' selected':''}>${esc(n)}</option>`).join('')}</select>`
+  :`<input id="pl" placeholder="اكتب اسمك" value="${esc(player)}" autocomplete="off">`;
+ app.innerHTML=`<div class="screen">
+  <div class="hdr"><img alt="ترويسة المدرسة" src="${HDR}"></div>
+  <div class="logo"><div class="crest" aria-hidden="true">🛡️</div><h1>مغامرة فارس</h1><p>النحو والإملاء • لغتي العربية • الصف السادس</p></div>
+  <div class="player"><div class="av">🧑‍🎓</div><label for="pl">اللاعب:</label>${picker}<p class="warn" id="warn" hidden>اختر اسمك أولًا لتبدأ اللعب</p><div id="pcard" style="flex-basis:100%">${playerCard()}</div></div>
+  ${[['nahw','🏛️ قلعة النحو'],['imla','✍️ واحة الإملاء']].map(([c,t])=>`<h3 class="sect">${t}</h3><div class="worlds sm">${WORLDS.map((w,i)=>w.cat!==c?'':`<button class="world ${w.mix?'w4 boss':'w'+((i%5)+1)}" data-i="${i}">
+    <span class="lv">${w.mix?'الزعيم':AR(WORLDS.filter((z,j)=>j<=i&&z.cat===c&&!z.mix).length)}</span>${best[w.id]!=null?`<span class="best">⭐ ${AR(best[w.id])}</span>`:''}
+    <span class="ic">${w.icon}</span><span class="nm">${w.short}</span>${w.mix?`<span class="sub">أسئلة مختلطة من كل الدروس</span>`:''}</button>`).join('')}</div>`).join('')}
+  <div class="opts-row"><button class="toggle" id="tm" aria-pressed="${useTimer}">⏱️ مؤقت ${AR(TIME)} ثانية</button><button class="teacher" id="tch">📊 نتائج الطلاب (للمعلم)</button></div>
+  <div class="credits"><span>معلم اللغة العربية: أ. خالد الحمري</span><span>مدير المدرسة: أ. حمود أحمد</span></div></div>`;
+ const pl=document.getElementById('pl');
+ const bindBdg=()=>{const b=document.getElementById('bdg');if(b)b.onclick=badgeCase};bindBdg();
+ pl.onchange=pl.oninput=()=>{player=pl.value.trim();document.getElementById('warn').hidden=true;try{localStorage.setItem('mu3tal-player',player)}catch(e){}document.getElementById('pcard').innerHTML=playerCard();bindBdg()};
+ document.getElementById('tch').onclick=pinGate;
+ document.getElementById('tm').onclick=e=>{useTimer=!useTimer;e.currentTarget.setAttribute('aria-pressed',useTimer)};
+ app.querySelectorAll('.world').forEach(b=>b.onclick=()=>{player=pl.value.trim();if(!player){document.getElementById('warn').hidden=false;pl.focus();beep('no');return}modes(+b.dataset.i)});
+}
+
+function start(i){
+ stopSnake();L=WORLDS[i];L.idx=i;qi=0;correct=0;points=0;streak=0;bestStreak=0;res=[];
+ qs=L.mix?shuffle(catWorlds(L.cat).flatMap(w=>w.q)).slice(0,10):shuffle(L.q);
+ MODE=MODE||'quiz';hearts=3;
+ if(MODE==='adv'){qs=qs.slice(0,10)}
+ question();
+}
+
+
+/* ===== أنماط اللعب ===== */
+const TEACHER_PIN='1234';let pinOk=false;
+let MODE='quiz',hearts=3,extraStat='',missList=[];
+const MODES={
+ quiz:{name:'الاختبار السريع',icon:'⚡',d:'١٠ أسئلة مع مؤقت وسلسلة نارية',c:'w1'},
+ adv:{name:'المغامرة',icon:'🗺️',d:'رحلة من الغابة إلى القلعة بثلاثة قلوب',c:'w2'},
+ mem:{name:'بطاقات الذاكرة',icon:'🃏',d:'اقلب البطاقات وطابق كل بطاقة بما يناسبها',c:'w3'},
+ snake:{name:'لعبة الثعبان',icon:'🐍',d:'وجّه الثعبان ليأكل الإجابة الصحيحة',c:'w4'},
+ plane:{name:'لعبة الطائرة',icon:'✈️',d:'اصطدم بالسحابة التي فيها الإجابة الصحيحة',c:'w5'},
+ jump:{name:'قفزة فارس',icon:'🏃',d:'اجرِ واقفز واضرب صندوق الإجابة الصحيحة',c:'w6'}
+};
+
+function modes(i){
+ stopT();stopSnake();L=WORLDS[i];L.idx=i;
+ const rule=L.mix?`<div class="rule mini"><div class="ic">👑</div><h2>${L.name}</h2><p>تحدٍّ يجمع أسئلة من كل دروس ${L.cat==='nahw'?'النحو':'الإملاء'}.</p></div>`
+  :`<div class="rule mini"><div class="ic">${L.icon}</div><h2>${L.rule.h}</h2><p>${L.rule.p}</p><div class="chips">${L.rule.ex.map(e=>`<span>${e}</span>`).join('')}</div></div>`;
+ points=0;streak=0;
+ app.innerHTML=`<div class="screen">${hud()}<div style="height:12px"></div>${rule}
+  <h3 class="pick">اختر لعبتك 🎮</h3>
+  <div class="worlds">${Object.entries(MODES).map(([k,m])=>`<button class="world ${m.c}" data-m="${k}"><span class="ic">${m.icon}</span><span class="nm">${m.name}</span><span class="sub">${m.d}</span></button>`).join('')}</div>
+  <div class="btns"><button class="b3d g" id="bk">⬅ العوالم</button></div></div>`;
+ app.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>playMode(i,b.dataset.m));
+ document.getElementById('bk').onclick=home;
+}
+function playMode(i,m){
+ MODE=m;extraStat='';missList=[];
+ if(m==='mem')return memory(i);
+ if(m==='snake')return snake(i);
+ if(m==='plane')return plane(i);
+ if(m==='jump')return jumpGame(i);
+ start(i);
+}
+
+/* ===== المغامرة ===== */
+const ZONES=['🌲','🌲','🌲','🌉','🌉','⛰️','⛰️','🏰','🏰','🏰'];
+function heartsHtml(){return [0,1,2].map(i=>`<span class="${i<hearts?'':'lost'}">❤️</span>`).join('')}
+function advTrail(){
+ return `<div class="trail"><div class="tr-top"><span class="zone">${qi<3?'🌲 الغابة المسحورة':qi<5?'🌉 جسر الحروف':qi<7?'⛰️ جبل الإعراب':'🏰 قلعة الزعيم'}</span><span class="hearts" id="hearts">${heartsHtml()}</span></div>
+  <div class="path">${qs.map((_,j)=>`<div class="node ${j<qi?(res[j]?'ok':'no'):j===qi?'cur':''}"><span class="z">${ZONES[j]||'⭐'}</span>${j===qi?'<span class="hero">🧑‍🎓</span>':''}</div>`).join('<i class="seg"></i>')}</div></div>`;
+}
+
+/* ===== بطاقات الذاكرة ===== */
+const PAIRS=[
+ [['يسمو','ضمة مقدّرة على الواو'],['يجري','ضمة مقدّرة على الياء'],['يرقى','ضمة مقدّرة على الألف'],['التعذّر','الألف لا تقبل الحركة'],['الثقل','الضمة ثقيلة على الواو والياء'],['حرف العلة عند الرفع','يبقى ثابتًا']],
+ [['لن يدعوَ','فتحة ظاهرة على الواو'],['أن يمشيَ','فتحة ظاهرة على الياء'],['كي يسعى','فتحة مقدّرة على الألف'],['أدوات النصب','أنْ، لنْ، كي، حتى'],['تظهر الفتحة على الواو والياء','لخفّتها'],['لن يرجوَ','منصوب بلن']],
+ [['لم يدعُ','حُذفت الواو'],['لا تمشِ','حُذفت الياء'],['لم يسعَ','حُذفت الألف'],['أدوات الجزم','لمْ، لا الناهية، لام الأمر'],['علامة جزم المعتل','حذف حرف العلة'],['لِيرمِ','مجزوم بلام الأمر']]
+];
+let mem={};
+function memory(i){
+ stopT();stopSnake();L=WORLDS[i];L.idx=i;correct=0;points=0;streak=0;bestStreak=0;res=[];
+ const pairs=L.mix?shuffle(catWorlds(L.cat).map(w=>shuffle(w.pairs)[0])).slice(0,6):L.pairs;
+ const cards=shuffle(pairs.flatMap((p,k)=>[{k,t:p[0],side:'a'},{k,t:p[1],side:'b'}]));
+ mem={cards,open:[],found:0,moves:0,lock:false,t0:Date.now(),pairs,missed:new Set()};
+ app.innerHTML=`<div class="screen">${hud()}
+  <div class="memtop"><span class="pill">🎯 الأزواج: <b id="mf">٠</b>/${AR(pairs.length)}</span><span class="pill">🔁 المحاولات: <b id="mm">٠</b></span><span class="pill">⏱️ <b id="mt">٠</b>ث</span></div>
+  <p class="hint">اقلب بطاقتين: طابق كل كلمة أو مصطلح مع ما يناسبه.</p>
+  <div class="mgrid">${cards.map((c,j)=>`<button class="mcard" data-j="${j}" aria-label="بطاقة ${AR(j+1)}"><span class="back">❓</span><span class="face ${c.side}">${c.t}</span></button>`).join('')}</div>
+  <div class="btns"><button class="b3d g" id="bk">⬅ الألعاب</button></div></div>`;
+ document.getElementById('bk').onclick=()=>{clearInterval(mem.tick);modes(i)};
+ app.querySelectorAll('.mcard').forEach(b=>b.onclick=()=>flip(+b.dataset.j));
+ mem.tick=setInterval(()=>{const e=document.getElementById('mt');if(!e){clearInterval(mem.tick);return}e.textContent=AR(Math.floor((Date.now()-mem.t0)/1000))},1000);
+}
+function flip(j){
+ const c=mem.cards[j],els=app.querySelectorAll('.mcard');
+ if(mem.lock||c.done||mem.open.includes(j))return;
+ els[j].classList.add('up');mem.open.push(j);beep('tap');
+ if(mem.open.length<2)return;
+ mem.moves++;document.getElementById('mm').textContent=AR(mem.moves);
+ const [a,b]=mem.open;
+ if(mem.cards[a].k===mem.cards[b].k){
+  mem.cards[a].done=mem.cards[b].done=true;els[a].classList.add('done');els[b].classList.add('done');
+  mem.found++;streak++;bestStreak=Math.max(bestStreak,streak);points+=100+(streak>=3?50:0);
+  document.getElementById('mf').textContent=AR(mem.found);document.getElementById('pts').textContent='🪙 '+AR(points);document.getElementById('stk').textContent='🔥 '+AR(streak);
+  mem.open=[];beep('ok');
+  if(mem.found===mem.pairs.length){clearInterval(mem.tick);
+   const extra=mem.moves-mem.pairs.length;correct=Math.max(2,Math.min(10,10-Math.floor(Math.max(0,extra-3)/2)));
+   const secs=Math.floor((Date.now()-mem.t0)/1000);
+   extraStat=`<span class="pill">🔁 ${AR(mem.moves)} محاولة • ⏱️ ${AR(secs)} ث</span>`;
+   missList=[...mem.missed].map(k=>mem.pairs[k][0]+' ↔ '+mem.pairs[k][1]);
+   setTimeout(finish,700)}
+ }else{
+  mem.missed.add(mem.cards[a].k);streak=0;document.getElementById('stk').textContent='🔥 ٠';
+  mem.lock=true;els[a].classList.add('bad');els[b].classList.add('bad');beep('no');
+  setTimeout(()=>{els[a].classList.remove('up','bad');els[b].classList.remove('up','bad');mem.open=[];mem.lock=false},900);
+ }
+}
+
+/* ===== لعبة الثعبان ===== */
+/* [مرفوع، منصوب، مجزوم، تكملة الجملة] */
+const VERBS=[
+ ['يدعو','يدعوَ','يدعُ','الطالبُ إلى الخير'],['يرجو','يرجوَ','يرجُ','المجتهدُ النجاحَ'],['يسمو','يسموَ','يسمُ','المؤمنُ بأخلاقه'],
+ ['يعلو','يعلوَ','يعلُ','الصوتُ في الصف'],['يمشي','يمشيَ','يمشِ','الطفلُ بهدوء'],['يبني','يبنيَ','يبنِ','العاملُ البيتَ'],
+ ['يجري','يجريَ','يجرِ','اللاعبُ في الملعب'],['يرمي','يرميَ','يرمِ','اللاعبُ الكرةَ'],['يسعى','يسعى','يسعَ','الطالبُ إلى العلم'],['يرقى','يرقى','يرقَ','المجتهدُ إلى القمة']
+];
+const TOOLS=[[''],['لن','يجب أن','كي'],['لم']];
+const CASEN=['المرفوع','المنصوب','المجزوم'];
+function snakeRounds(i){
+ return L.mix?shuffle(catWorlds(L.cat).flatMap(w=>shuffle(w.rounds()).slice(0,2))).slice(0,10):shuffle(L.rounds()).slice(0,10);
+}
+let SN=null;
+function stopSnake(){if(SN){SN.stop=true;clearTimeout(SN.t);if(SN.key)removeEventListener('keydown',SN.key);if(SN.key2)removeEventListener('keyup',SN.key2);SN=null}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&SN&&SN.pause)SN.pause()});
+function snake(i){
+ stopT();stopSnake();L=WORLDS[i];L.idx=i;correct=0;points=0;streak=0;bestStreak=0;res=[];
+ const rounds=snakeRounds(i);
+ app.innerHTML=`<div class="screen">${hud()}
+  <div class="dots">${rounds.map(()=>'<i></i>').join('')}</div>
+  <div class="snq"><small id="snc">كُلِ الإجابة الصحيحة</small><div id="snp"></div></div>
+  <div class="snwrap"><canvas id="snk" aria-label="ساحة الثعبان"></canvas>
+   <div class="snover" id="sno"><div><div style="font-size:46px">🐍</div><b>حرّك الثعبان ليأكل الإجابة الصحيحة</b><p>الحاسوب: الأسهم • الجوال: اسحب على الساحة أو استخدم الأزرار</p><button class="b3d y" id="sgo">ابدأ ▶</button></div></div></div>
+  <div class="pad"><button class="b3d g" data-d="0,-1" aria-label="أعلى">▲</button><div><button class="b3d g" data-d="1,0" aria-label="يمين">▶</button><button class="b3d g" data-d="0,1" aria-label="أسفل">▼</button><button class="b3d g" data-d="-1,0" aria-label="يسار">◀</button></div></div>
+  <div class="btns"><button class="b3d g" id="bk">⬅ الألعاب</button></div></div>`;
+ const cv=document.getElementById('snk'),x=cv.getContext('2d'),N=15;
+ const size=Math.min(app.clientWidth,440);const dpr=window.devicePixelRatio||1;
+ cv.style.width=cv.style.height=size+'px';cv.width=cv.height=size*dpr;x.scale(dpr,dpr);const C=size/N;
+ SN={rounds,r:0,body:[[7,10],[7,11],[7,12]],dir:[0,-1],next:[0,-1],grow:0,tokens:[],stop:false,run:false,speed:260,flash:null};
+ const S=SN;
+ function place(){
+  const R=S.rounds[S.r];const words=shuffle([{t:R.right,ok:1},...R.wrong.map(t=>({t,ok:0}))]);
+  S.tokens=[];const head=S.body[0];
+  for(const w of words){let p,tries=0;
+   do{p=[1+Math.floor(Math.random()*(N-2)),1+Math.floor(Math.random()*(N-2))];tries++}
+   while(tries<200&&(S.body.some(b=>b[0]===p[0]&&b[1]===p[1])||Math.abs(p[0]-head[0])+Math.abs(p[1]-head[1])<4||S.tokens.some(t=>Math.abs(t.p[0]-p[0])<4&&Math.abs(t.p[1]-p[1])<2)));
+   S.tokens.push({...w,p})}
+  document.getElementById('snp').innerHTML=R.prompt;
+  document.getElementById('snc').textContent='كُلْ '+R.ins;
+  const d=app.querySelectorAll('.dots i');d.forEach((e,j)=>{e.className=j<S.r?(res[j]?'ok':'no'):j===S.r?'cur':''});
+ }
+ function draw(){
+  x.clearRect(0,0,size,size);
+  for(let a=0;a<N;a++)for(let b=0;b<N;b++){x.fillStyle=(a+b)%2?'#1c5e66':'#196a72';x.fillRect(a*C,b*C,C,C)}
+  S.tokens.forEach(t=>{const cx=t.p[0]*C+C/2,cy=t.p[1]*C+C/2;
+   x.fillStyle='#ffd34e';x.beginPath();x.arc(cx,cy,C*.42,0,7);x.fill();x.fillStyle='#ff8a3d';x.beginPath();x.arc(cx,cy,C*.2,0,7);x.fill();
+   x.font=`800 ${Math.max(14,C*.62)}px Cairo,Tahoma,sans-serif`;x.direction='rtl';x.textAlign='center';x.textBaseline='bottom';
+   const w=x.measureText(t.t).width+12,ty=cy-C*.5;
+   x.fillStyle='rgba(255,253,247,.96)';const bx=Math.min(Math.max(cx-w/2,2),size-w-2);
+   x.beginPath();x.roundRect?x.roundRect(bx,ty-C*.85,w,C*.85,8):x.rect(bx,ty-C*.85,w,C*.85);x.fill();
+   x.fillStyle='#1d2b3a';x.fillText(t.t,bx+w/2,ty-2)});
+  S.body.forEach((b,j)=>{x.fillStyle=j===0?'#ff6f91':j%2?'#2ecc71':'#27b863';const r=C*.18;
+   x.beginPath();x.roundRect?x.roundRect(b[0]*C+1.5,b[1]*C+1.5,C-3,C-3,r):x.rect(b[0]*C+1.5,b[1]*C+1.5,C-3,C-3);x.fill()});
+  const h=S.body[0];x.fillStyle='#fff';x.beginPath();x.arc(h[0]*C+C*.35,h[1]*C+C*.38,C*.12,0,7);x.arc(h[0]*C+C*.65,h[1]*C+C*.38,C*.12,0,7);x.fill();
+  if(S.flash){x.fillStyle=S.flash;x.globalAlpha=.25;x.fillRect(0,0,size,size);x.globalAlpha=1}
+ }
+ function over(msg){S.run=false;const o=document.getElementById('sno');o.hidden=false;
+  o.innerHTML=`<div><div style="font-size:46px">💥</div><b>${msg}</b><button class="b3d y" id="sfin">النتيجة 🏁</button></div>`;
+  document.getElementById('sfin').onclick=endSnake;beep('no')}
+ function endSnake(){snLen=S.body.length;missList=S.rounds.filter((_,j)=>res[j]===false).map(R=>R.plain);extraStat=`<span class="pill">🐍 الطول ${AR(S.body.length)}</span>`;finish()}
+ function step(){
+  if(S.stop||!S.run)return;
+  S.dir=S.next;const h=S.body[0];const nh=[(h[0]+S.dir[0]+N)%N,(h[1]+S.dir[1]+N)%N];
+  if(S.body.slice(0,-1).some(b=>b[0]===nh[0]&&b[1]===nh[1])){draw();return over('اصطدم الثعبان بنفسه!')}
+  S.body.unshift(nh);if(S.grow>0)S.grow--;else S.body.pop();
+  const hit=S.tokens.find(t=>t.p[0]===nh[0]&&t.p[1]===nh[1]);
+  if(hit){const R=S.rounds[S.r];const ok=!!hit.ok;res[S.r]=ok;
+   if(ok){correct++;streak++;bestStreak=Math.max(bestStreak,streak);points+=100+(streak>=3?50:0);S.grow+=2;S.flash='#2ecc71';beep('ok');S.speed=Math.max(150,S.speed-10)}
+   else{streak=0;if(S.body.length>3)S.body.pop();S.flash='#ff5b5b';beep('no');
+    const f=document.getElementById('snc');f.textContent='✘ الصحيح: '+R.right;}
+   document.getElementById('pts').textContent='🪙 '+AR(points);document.getElementById('stk').textContent='🔥 '+AR(streak);
+   setTimeout(()=>{if(S)S.flash=null},250);
+   S.r++;if(S.r>=S.rounds.length){draw();S.run=false;setTimeout(endSnake,500);return}
+   if(ok)place();else{S.tokens=[];setTimeout(()=>{if(SN===S&&!S.stop)place()},900)}
+  }
+  draw();S.t=setTimeout(step,S.speed);
+ }
+ function turn(dx,dy){if(dx===-S.dir[0]&&dy===-S.dir[1])return;S.next=[dx,dy]}
+ S.key=e=>{const m={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.key];if(m&&S.run){e.preventDefault();turn(...m)}};
+ addEventListener('keydown',S.key);
+ app.querySelectorAll('[data-d]').forEach(b=>b.onpointerdown=e=>{e.preventDefault();const [dx,dy]=b.dataset.d.split(',').map(Number);turn(dx,dy)});
+ let ts=null;cv.addEventListener('touchstart',e=>{ts=e.touches[0]},{passive:true});
+ cv.addEventListener('touchmove',e=>{if(S.run)e.preventDefault()},{passive:false});
+ cv.addEventListener('touchend',e=>{if(!ts)return;const t=e.changedTouches[0],dx=t.clientX-ts.clientX,dy=t.clientY-ts.clientY;ts=null;
+  if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;Math.abs(dx)>Math.abs(dy)?turn(dx>0?1:-1,0):turn(0,dy>0?1:-1)});
+ document.getElementById('bk').onclick=()=>{stopSnake();modes(i)};
+ document.getElementById('sgo').onclick=()=>{document.getElementById('sno').hidden=true;S.run=true;step()};
+ S.pause=()=>{if(S.run){S.run=false;clearTimeout(S.t);const o=document.getElementById('sno');if(o){o.hidden=false;o.innerHTML='<div><b>توقّف مؤقت</b><button class="b3d y" id="sres">تابع ▶</button></div>';document.getElementById('sres').onclick=()=>{o.hidden=true;S.run=true;step()}}}};
+ place();draw();
+}
+
+/* ===== لعبة الطائرة (على طريقة Wordwall) ===== */
+function plane(i){
+ stopT();stopSnake();L=WORLDS[i];L.idx=i;correct=0;points=0;streak=0;bestStreak=0;res=[];
+ const rounds=snakeRounds(i);
+ app.innerHTML=`<div class="screen">${hud()}
+  <div class="dots">${rounds.map(()=>'<i></i>').join('')}</div>
+  <div class="snq"><small id="snc">اصطدم بالإجابة الصحيحة</small><div id="snp"></div></div>
+  <div class="snwrap"><canvas id="pln" aria-label="سماء الطائرة"></canvas>
+   <div class="snover" id="sno"><div><div style="font-size:46px">✈️</div><b>وجّه الطائرة لتصطدم بالسحابة التي فيها الإجابة الصحيحة</b><p>الحاسوب: سهم أعلى وأسفل • الجوال: اسحب بإصبعك أو استخدم الأزرار</p><button class="b3d y" id="sgo">انطلق ▶</button></div></div></div>
+  <div class="pad row"><button class="b3d g" data-v="-1" aria-label="أعلى">▲</button><button class="b3d g" data-v="1" aria-label="أسفل">▼</button></div>
+  <div class="btns"><button class="b3d g" id="bk">⬅ الألعاب</button></div></div>`;
+ const cv=document.getElementById('pln'),x=cv.getContext('2d');
+ const W=Math.min(app.clientWidth,640),H=Math.round(Math.min(380,Math.max(280,W*.62))),dpr=window.devicePixelRatio||1;
+ cv.style.width=W+'px';cv.style.height=H+'px';cv.width=W*dpr;cv.height=H*dpr;x.scale(dpr,dpr);
+ const LANES=5,lh=H/LANES;
+ const P={r:0,y:H/2,ty:H/2,v:0,clouds:[],run:false,stop:false,speed:Math.max(1.6,W/260),t:0,boom:null,hold:0};
+ SN={stop:false,t:null,key:null};const S=SN;
+ const bg=Array.from({length:30},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.5}));
+ function spawn(){
+  const R=rounds[P.r];const lanes=shuffle([0,1,2,3,4]).slice(0,3);
+  const words=shuffle([{t:R.right,ok:1},...R.wrong.map(t=>({t,ok:0}))]);
+  P.clouds=words.map((w,k)=>({...w,x:W+60+k*70,y:lh*lanes[k]+lh/2,hit:false}));
+  document.getElementById('snp').innerHTML=R.prompt;
+  document.getElementById('snc').textContent='اصطدم بسحابة '+R.ins;
+  app.querySelectorAll('.dots i').forEach((e,j)=>{e.className=j<P.r?(res[j]?'ok':'no'):j===P.r?'cur':''});
+ }
+ function cloud(cx,cy,w,h,col){x.fillStyle=col;x.beginPath();
+  x.ellipse(cx,cy,w/2,h/2,0,0,7);x.ellipse(cx-w*.28,cy-h*.25,w*.24,h*.42,0,0,7);x.ellipse(cx+w*.2,cy-h*.32,w*.26,h*.45,0,0,7);x.fill()}
+ function draw(){
+  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'#5ec8e5');g.addColorStop(1,'#bfeaf5');x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.fillStyle='rgba(255,255,255,.55)';bg.forEach(s=>{x.beginPath();x.arc(s.x,s.y,s.r*3,0,7);x.fill()});
+  x.font=`800 ${Math.max(16,Math.min(22,lh*.42))}px Cairo,Tahoma,sans-serif`;x.direction='rtl';x.textAlign='center';x.textBaseline='middle';
+  P.clouds.forEach(c=>{if(c.hit==='gone')return;const tw=x.measureText(c.t).width+36,h=Math.min(lh*.92,64);
+   cloud(c.x,c.y,tw,h,c.hit==='ok'?'#c8f7d9':c.hit==='no'?'#ffd0d0':'#fff');x.fillStyle='#1d2b3a';x.fillText(c.t,c.x,c.y+2)});
+  /* الطائرة */
+  const px=W*.13,py=P.y;x.save();x.translate(px,py);x.rotate(Math.max(-.35,Math.min(.35,P.v*.04)));
+  x.font=`${Math.min(46,lh*.9)}px sans-serif`;x.textAlign='center';x.textBaseline='middle';x.direction='ltr';
+  x.rotate(Math.PI/4);x.fillText('✈️',0,0);x.restore();
+  if(P.boom){x.font='40px sans-serif';x.textAlign='center';x.fillText(P.boom.e,P.boom.x,P.boom.y);}
+ }
+ function next(ok){
+  res[P.r]=ok;
+  if(ok){correct++;streak++;bestStreak=Math.max(bestStreak,streak);points+=100+(streak>=3?50:0);beep('ok');P.speed+=.15}
+  else{streak=0;beep('no');document.getElementById('snc').textContent='✘ الصحيح: '+rounds[P.r].right}
+  document.getElementById('pts').textContent='🪙 '+AR(points);document.getElementById('stk').textContent='🔥 '+AR(streak);
+  P.r++;P.hold=ok?25:60;
+  if(P.r>=rounds.length){P.run=false;setTimeout(endPlane,700)}
+ }
+ function endPlane(){missList=rounds.filter((_,j)=>res[j]===false).map(R=>R.plain);extraStat='<span class="pill">✈️ الطائرة</span>';finish()}
+ function loop(){
+  if(S.stop)return;
+  if(P.run){
+   P.y+=(P.ty-P.y)*.18;P.v=(P.ty-P.y)*.3;
+   if(P.hold>0){P.hold--;if(P.hold===0&&P.r<rounds.length){P.clouds=[];P.boom=null;spawn()}}
+   else{
+    P.clouds.forEach(c=>{if(c.hit!=='gone')c.x-=P.speed});
+    const px=W*.13;
+    for(const c of P.clouds){if(c.hit)continue;
+     if(Math.abs(c.x-px)<40&&Math.abs(c.y-P.y)<lh*.45){c.hit=c.ok?'ok':'no';P.boom={e:c.ok?'⭐':'💥',x:c.x,y:c.y-30};
+      if(!c.ok){const r=P.clouds.find(z=>z.ok);if(r)r.hit='ok'}
+      next(!!c.ok);break}}
+    if(P.hold===0&&P.clouds.length&&P.clouds.every(c=>c.x<-80||c.hit)){if(!P.clouds.some(c=>c.hit))next(false);else P.clouds=[]}
+   }
+   bg.forEach(s=>{s.x-=P.speed*.3;if(s.x<-10)s.x=W+10});
+  }
+  draw();requestAnimationFrame(loop);
+ }
+ function move(d){P.ty=Math.max(lh/2,Math.min(H-lh/2,(Math.round((P.ty-lh/2)/lh)+d)*lh+lh/2))}
+ S.key=e=>{if(!P.run)return;if(e.key==='ArrowUp'){e.preventDefault();move(-1)}else if(e.key==='ArrowDown'){e.preventDefault();move(1)}};
+ addEventListener('keydown',S.key);
+ app.querySelectorAll('[data-v]').forEach(b=>b.onpointerdown=e=>{e.preventDefault();move(+b.dataset.v)});
+ const setY=e=>{const r=cv.getBoundingClientRect();const t=(e.touches?e.touches[0]:e).clientY-r.top;P.ty=Math.max(lh/2,Math.min(H-lh/2,t))};
+ cv.addEventListener('touchstart',e=>{if(P.run)setY(e)},{passive:true});
+ cv.addEventListener('touchmove',e=>{if(P.run){e.preventDefault();setY(e)}},{passive:false});
+ cv.addEventListener('pointerdown',e=>{if(P.run&&e.pointerType==='mouse')setY(e)});
+ document.getElementById('bk').onclick=()=>{stopSnake();modes(i)};
+ document.getElementById('sgo').onclick=()=>{document.getElementById('sno').hidden=true;P.run=true};
+ S.pause=()=>{if(P.run){P.run=false;const o=document.getElementById('sno');if(o){o.hidden=false;o.innerHTML='<div><b>توقّف مؤقت</b><button class="b3d y" id="sres">تابع ▶</button></div>';document.getElementById('sres').onclick=()=>{o.hidden=true;P.run=true}}}};
+ spawn();loop();
+}
+
+
+/* ===== الأوسمة والمستويات ===== */
+let snLen=0;
+const BADGES=[
+ {id:'first',i:'🌱',n:'الخطوة الأولى',d:'أنهِ أول لعبة'},
+ {id:'nahw',i:'🏛️',n:'بطل النحو',d:'٩ فأكثر في ٥ عوالم من قلعة النحو'},
+ {id:'imla',i:'✍️',n:'بطل الإملاء',d:'٩ فأكثر في ٣ عوالم من واحة الإملاء'},
+ {id:'verb',i:'⚔️',n:'فارس الأفعال المعتلّة',d:'٩ فأكثر في الرفع والنصب والجزم والأمر'},
+ {id:'hamza',i:'🪶',n:'سيّد الهمزات',d:'٩ فأكثر في عوالم الهمزة الثلاثة'},
+ {id:'boss',i:'👑',n:'قاهر الزعيم',d:'٩ فأكثر في عالم زعيم'},
+ {id:'full',i:'💯',n:'العلامة الكاملة',d:'١٠ من ١٠ في أي لعبة'},
+ {id:'fire',i:'🔥',n:'السلسلة النارية',d:'٥ إجابات صحيحة متتالية'},
+ {id:'castle',i:'🏰',n:'بطل القلعة',d:'أكمل المغامرة حتى القلعة'},
+ {id:'heart',i:'❤️',n:'القلب الكامل',d:'أكمل المغامرة دون أن تفقد قلبًا'},
+ {id:'brain',i:'🧠',n:'ذاكرة حديدية',d:'طابق كل البطاقات في ٩ محاولات أو أقل'},
+ {id:'snake',i:'🐍',n:'الثعبان العملاق',d:'اجعل طول الثعبان ١٥ أو أكثر'},
+ {id:'pilot',i:'✈️',n:'الطيّار الماهر',d:'١٠ من ١٠ في لعبة الطائرة'},
+ {id:'jumper',i:'🏃',n:'بطل القفز',d:'أكمل قفزة الفارس دون أن تخسر قلبًا'},
+ {id:'explorer',i:'🎮',n:'المستكشف',d:'جرّب الألعاب الست كلها'},
+ {id:'traveler',i:'🌍',n:'جوّال العوالم',d:'العب في ١٠ عوالم مختلفة'},
+ {id:'knight',i:'🏅',n:'فارس العربية الأكبر',d:'اجمع وسامَي بطل النحو وبطل الإملاء'}
+];
+const LEVELS=[[0,'مبتدئ','🌱'],[1000,'متدرّب','📘'],[3000,'فارس','🛡️'],[6000,'بطل','🏆'],[10000,'أسطورة','🌟']];
+function profAll(){try{return JSON.parse(localStorage.getItem('mu3tal-prof')||'{}')}catch(e){return{}}}
+function prof(n){const a=profAll();const p=a[n]||{};return {xp:p.xp||0,badges:p.badges||[],modes:p.modes||[],worlds:(p.worlds||[]).filter(w=>typeof w==='string'),best:p.best||{}}}
+function profSave(n,p){try{const a=profAll();a[n]=p;localStorage.setItem('mu3tal-prof',JSON.stringify(a))}catch(e){}}
+function levelOf(xp){let l=LEVELS[0],k=0;LEVELS.forEach((x,j)=>{if(xp>=x[0]){l=x;k=j}});const nx=LEVELS[k+1];return{name:l[1],icon:l[2],k,next:nx?nx[0]:null,from:l[0]}}
+function awardBadges(n){
+ const p=prof(player),had=new Set(p.badges),got=new Set(had),before=levelOf(p.xp).k;
+ p.xp+=points;if(!p.modes.includes(MODE))p.modes.push(MODE);if(!p.worlds.includes(L.id))p.worlds.push(L.id);p.best[L.id]=Math.max(p.best[L.id]||0,correct);const B9=id=>(p.best[id]||0)>=9;
+ got.add('first');
+ if(catWorlds('nahw').filter(w=>B9(w.id)).length>=5)got.add('nahw');
+ if(catWorlds('imla').filter(w=>B9(w.id)).length>=3)got.add('imla');
+ if(['rafa','nasb','jazm','amr'].every(B9))got.add('verb');
+ if(['hamzaM','hamzaMT','hamzaT'].every(B9))got.add('hamza');
+ if(B9('bossN')||B9('bossI'))got.add('boss');
+ if(correct===n&&n===10)got.add('full');
+ if(bestStreak>=5)got.add('fire');
+ if(MODE==='adv'&&hearts>0){got.add('castle');if(hearts===3)got.add('heart')}
+ if(MODE==='mem'&&mem.moves<=9)got.add('brain');
+ if(MODE==='snake'&&snLen>=15)got.add('snake');
+ if(MODE==='plane'&&correct===10)got.add('pilot');
+ if(MODE==='jump'&&hearts===3)got.add('jumper');
+ if(Object.keys(MODES).every(m=>p.modes.includes(m)))got.add('explorer');
+ if(p.worlds.length>=10)got.add('traveler');
+ if(got.has('nahw')&&got.has('imla'))got.add('knight');
+ p.badges=[...got];profSave(player,p);
+ const fresh=BADGES.filter(b=>got.has(b.id)&&!had.has(b.id));
+ return{fresh,p,lvUp:levelOf(p.xp).k>before?levelOf(p.xp):null};
+}
+function playerCard(){
+ if(!player)return '';const p=prof(player),lv=levelOf(p.xp);
+ const pct=lv.next?Math.round((p.xp-lv.from)/(lv.next-lv.from)*100):100;
+ return `<div class="lvcard"><span class="lvi">${lv.icon}</span><div class="lvb"><b>المستوى: ${lv.name}</b><div class="xp"><div style="width:${pct}%"></div></div><small>🪙 ${AR(p.xp)}${lv.next?' / '+AR(lv.next):' – أعلى مستوى'}</small></div>
+  <button class="lvbtn" id="bdg">🎖️ أوسمتي ${AR(BADGES.filter(b=>p.badges.includes(b.id)).length)}/${AR(BADGES.length)}</button></div>`;
+}
+function badgeCase(){
+ stopT();stopSnake();const p=prof(player),lv=levelOf(p.xp);
+ app.innerHTML=`<div class="screen"><div class="rp">
+  <h1>🎖️ خزانة أوسمة ${esc(player)}</h1><p class="meta">${lv.icon} المستوى: ${lv.name} • 🪙 ${AR(p.xp)} نقطة • ${AR(BADGES.filter(b=>p.badges.includes(b.id)).length)} من ${AR(BADGES.length)} وسامًا</p>
+  <div class="lvls">${LEVELS.map((l,j)=>`<span class="${j<=lv.k?'on':''}">${l[2]} ${l[1]}<small>${AR(l[0])}</small></span>`).join('')}</div>
+  <div class="bgrid">${BADGES.map(b=>`<div class="bdg ${p.badges.includes(b.id)?'got':''}"><span class="bi">${p.badges.includes(b.id)?b.i:'🔒'}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div>
+  <div class="btns"><button class="b3d" id="bk">⬅ العودة</button></div></div></div>`;
+ document.getElementById('bk').onclick=home;
+}
+
+
+/* ===== قفزة الفارس: لعبة منصّات أصلية ===== */
+const JTHEMES=[
+ {n:'عالم الرفع',st:['السهول الخضراء','الغابة','التلّة'],sky:['#7fd3ef','#d9f3fb'],hill:'#8ccf7e',top:'#4caf50',body:'#c27c3e',plat:'#ff8a3d',en:'#7a4b2a',cl:'rgba(255,255,255,.85)',lava:0,ic:'🌳'},
+ {n:'عالم النصب',st:['الكثبان','الواحة','الأهرامات'],sky:['#ffb36b','#ffe7c2'],hill:'#e9b872',top:'#f2c76b',body:'#d39a4c',plat:'#0f9d9a',en:'#2e7d32',cl:'rgba(255,248,230,.85)',lava:0,ic:'🏜️'},
+ {n:'عالم الجزم',st:['الكهف','الجسر','البركان'],sky:['#3b1f2b','#8a3b3b'],hill:'#5a2a2a',top:'#8d6e63',body:'#4e342e',plat:'#ff6f91',en:'#212121',cl:'rgba(255,200,170,.25)',lava:1,ic:'🌋'},
+ {n:'عالم الزعيم',st:['السحاب','البرج','القلعة'],sky:['#1d2b5a','#5b4a9e'],hill:'#3d3a7a',top:'#b39ddb',body:'#5e4fa2',plat:'#ffd34e',en:'#4a148c',cl:'rgba(255,255,255,.35)',lava:0,ic:'👑'}];
+function jumpGame(i){
+ stopT();stopSnake();L=WORLDS[i];L.idx=i;correct=0;points=0;streak=0;bestStreak=0;res=[];hearts=3;
+ const rounds=snakeRounds(i);const TH=JTHEMES[i%4];
+ app.innerHTML=`<div class="screen">${hud()}
+  <div class="trail" style="margin:8px 0"><div class="tr-top"><span class="zone" id="jz">${TH.ic} ${L.short}</span><span class="hearts" id="hearts">${heartsHtml()}</span></div></div>
+  <div class="snq"><small id="snc">اقفز واضرب صندوق الإجابة الصحيحة برأسك</small><div id="snp"></div></div>
+  <div class="snwrap"><canvas id="jmp" aria-label="مرحلة قفزة الفارس"></canvas>
+   <div class="snover" id="sno"><div><div style="font-size:46px">${TH.ic}</div><b style="font-size:22px;color:var(--yellow)">${L.icon} ${L.short}</b><b>ساعد فارس: اجرِ واقفز، واضرب صندوق الإجابة الصحيحة من الأسفل لتفتح البوابة</b><p>الحاسوب: الأسهم للحركة والمسافة أو ▲ للقفز • الجوال: الأزرار أسفل الساحة<br>اقفز فوق الشوكيّ لتهزمه، واحذر الحُفر!</p><button class="b3d y" id="sgo">ابدأ ▶</button></div></div></div>
+  <div class="jpad"><div><button class="b3d g" data-k="R" aria-label="يمين">▶</button><button class="b3d g" data-k="L" aria-label="يسار">◀</button></div><button class="b3d o jbtn" data-k="J" aria-label="قفز">⤒ قفز</button></div>
+  <div class="btns"><button class="b3d g" id="bk">⬅ الألعاب</button></div></div>`;
+ const cv=document.getElementById('jmp'),x=cv.getContext('2d');
+ const W=Math.min(app.clientWidth,720),H=W<500?300:360,dpr=window.devicePixelRatio||1;
+ cv.style.width=W+'px';cv.style.height=H+'px';cv.width=W*dpr;cv.height=H*dpr;x.scale(dpr,dpr);
+ const GY=H-50,SEG=1100,N=rounds.length,START=160;
+ /* بناء المرحلة */
+ const solids=[],crates=[],enemies=[],gates=[],stars=[];
+ for(let k=0;k<N;k++){
+  const x0=START+k*SEG;
+  if(k===0)solids.push({x:-400,y:GY,w:START+400,h:60,t:'g'});
+  if(k>=1){solids.push({x:x0,y:GY,w:250,h:60,t:'g'});solids.push({x:x0+340,y:GY,w:SEG-340,h:60,t:'g'})}
+  else solids.push({x:x0,y:GY,w:SEG,h:60,t:'g'});
+  if(k%2===1)solids.push({x:x0+410,y:GY-105,w:110,h:24,t:'p'});
+  if(k>=2)enemies.push({x:x0+480,y:GY-30,w:36,h:30,a:x0+400,b:x0+640,v:1.3+k*.08,dead:0});
+  const words=shuffle([{t:rounds[k].right,ok:1},...rounds[k].wrong.map(t=>({t,ok:0}))]);
+  words.forEach((w,j)=>crates.push({x:x0+690+j*104,y:GY-150,w:88,h:44,k,...w,hit:0,bump:0}));
+  gates.push({x:x0+1020,y:-200,w:28,h:GY+200,k,open:0});
+ }
+ const END=START+N*SEG+40;solids.push({x:START+N*SEG,y:GY,w:500,h:60,t:'g'});
+ const hero={x:60,y:GY-44,w:30,h:44,vx:0,vy:0,on:false,face:1,inv:0,step:0};
+ const keys={L:0,R:0,J:0};let cam=0,cur=0,run=false,done=false,lastJ=0,tPrev=0;
+ SN={stop:false,t:null,key:null};const S=SN;
+ const hills=Array.from({length:14},(_,j)=>({x:j*420+Math.random()*200,r:120+Math.random()*90}));
+ function setPrompt(){
+  if(cur>=N){document.getElementById('snp').innerHTML='🏁 انطلق إلى بوابة النصر!';document.getElementById('snc').textContent='أحسنت! بقيت خطوة واحدة';return}
+  const R=rounds[cur];document.getElementById('snp').innerHTML=R.prompt;
+  document.getElementById('snc').textContent=`التحدي ${AR(cur+1)} من ${AR(N)}: اضرب صندوق ${R.ins}`;
+  const sg=Math.min(2,Math.floor(cur/3.34));document.getElementById('jz').textContent=`${TH.ic} ${L.short} ${AR(sg+1)}: ${TH.st[sg]}`;
+  if(cur>0&&cur%3===0&&cur<N){const f=document.createElement('div');f.className='float';f.style.left='30%';f.style.top='40%';f.textContent='🚩 المرحلة '+AR(sg+1);document.body.appendChild(f);setTimeout(()=>f.remove(),1000)}
+ }
+ const hitR=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
+ function blocks(){return [...solids,...crates,...gates.filter(g=>!g.open)]}
+ function hurt(){if(hero.inv>0)return;hearts--;hero.inv=90;beep('no');streak=0;
+  document.getElementById('hearts').innerHTML=heartsHtml();document.getElementById('stk').textContent='🔥 ٠';
+  if(hearts<=0)over('انتهت القلوب!')}
+ function respawn(){const x0=START+Math.min(cur,N-1)*SEG;hero.x=cur===0?60:x0+30;hero.y=GY-120;hero.vx=hero.vy=0}
+ function hitCrate(c){
+  c.bump=8;if(c.hit||res[c.k]!==undefined||c.k!==cur){beep('tap');return}
+  const ok=!!c.ok;res[c.k]=ok;c.hit=ok?1:2;
+  if(ok){correct++;streak++;bestStreak=Math.max(bestStreak,streak);const g=100+(streak>=3?50:0);points+=g;beep('ok');
+   stars.push({x:c.x+c.w/2,y:c.y-10,vy:-4,life:50,t:'+'+AR(g)})}
+  else{streak=0;beep('no');crates.filter(z=>z.k===c.k&&z.ok).forEach(z=>z.hit=1);
+   document.getElementById('snc').textContent='✘ الصحيح: '+rounds[c.k].right;stars.push({x:c.x+c.w/2,y:c.y-10,vy:-3,life:50,t:'✘'})}
+  document.getElementById('pts').textContent='🪙 '+AR(points);document.getElementById('stk').textContent='🔥 '+AR(streak);
+  gates[c.k].open=1;cur++;setTimeout(()=>{if(SN===S)setPrompt()},ok?300:1300);
+ }
+ function over(msg){run=false;done=true;const o=document.getElementById('sno');o.hidden=false;
+  o.innerHTML=`<div><div style="font-size:46px">💥</div><b>${msg}</b><button class="b3d y" id="sfin">النتيجة 🏁</button></div>`;document.getElementById('sfin').onclick=end}
+ function end(){missList=rounds.filter((_,j)=>res[j]===false).map(R=>R.plain);for(let j=0;j<N;j++)if(res[j]===undefined)res[j]=false;
+  extraStat=`<span class="pill">🏃 ${hearts>0?'وصل فارس إلى بوابة النصر':'المحاولة انتهت'}</span>`;finish()}
+ function update(f){
+  if(hero.inv>0)hero.inv-=f;
+  const acc=.8,max=5.2;
+  if(keys.R){hero.vx=Math.min(max,hero.vx+acc*f);hero.face=1}else if(keys.L){hero.vx=Math.max(-max,hero.vx-acc*f);hero.face=-1}else hero.vx*=Math.pow(.75,f);
+  if(keys.J&&hero.on&&performance.now()-lastJ>180){hero.vy=-15.5;hero.on=false;lastJ=performance.now();beep('tap')}
+  if(!keys.J&&hero.vy<-6)hero.vy+= .9*f; /* قفزة أقصر عند ترك الزر */
+  hero.vy=Math.min(16,hero.vy+.9*f);
+  const B=blocks(),px=hero.x;
+  hero.x+=hero.vx*f;if(hero.x<cam-5)hero.x=cam-5;
+  for(const b of B)if(hitR(hero,b)){if(px+hero.w<=b.x+.01)hero.x=b.x-hero.w;else if(px>=b.x+b.w-.01)hero.x=b.x+b.w;else continue;hero.vx=0}
+  const gNext=gates.find(g=>!g.open);if(gNext&&hero.x+hero.w>gNext.x){hero.x=gNext.x-hero.w;hero.vx=0}
+  hero.y+=hero.vy*f;hero.on=false;
+  for(const b of B)if(!gates.includes(b)&&hitR(hero,b)){
+   if(hero.vy>0){hero.y=b.y-hero.h;hero.vy=0;hero.on=true}
+   else if(hero.vy<0){hero.y=b.y+b.h;hero.vy=1;if(crates.includes(b))hitCrate(b)}}
+  if(Math.abs(hero.vx)>.5&&hero.on)hero.step+=f*.25;
+  for(const e of enemies){if(e.dead){e.dead+=f;continue}
+   e.x+=e.v*f;if(e.x<e.a||e.x+e.w>e.b)e.v*=-1;
+   if(hitR(hero,e)){if(hero.vy>0&&hero.y+hero.h-e.y<16){e.dead=1;hero.vy=-10;points+=50;beep('ok');stars.push({x:e.x+18,y:e.y,vy:-3,life:40,t:'+٥٠'});document.getElementById('pts').textContent='🪙 '+AR(points)}else hurt()}}
+  if(hero.y>H+80){hurt();if(hearts>0)respawn()}
+  stars.forEach(s=>{s.y+=s.vy*f;s.life-=f});for(let j=stars.length-1;j>=0;j--)if(stars[j].life<=0)stars.splice(j,1);
+  crates.forEach(c=>{if(c.bump>0)c.bump-=f});
+  cam+=(Math.max(0,hero.x-W*.38)-cam)*.12;
+  if(!done&&hero.x>END){done=true;run=false;beep('win');setTimeout(end,600)}
+ }
+ function rr(X,Y,w,h,r){x.beginPath();x.roundRect?x.roundRect(X,Y,w,h,r):x.rect(X,Y,w,h)}
+ function draw(){
+  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,TH.sky[0]);g.addColorStop(1,TH.sky[1]);x.fillStyle=g;x.fillRect(0,0,W,H);
+  if(TH.lava){x.fillStyle='#ff5722';x.fillRect(0,H-14,W,14);x.fillStyle='#ffc107';for(let z=0;z<W;z+=26)x.fillRect(((z-cam*.9)%W+W)%W,H-16,10,4)}
+  x.fillStyle=TH.cl;[0,1,2,3].forEach(j=>{const cx=((j*380-cam*.2)%(W+300)+W+300)%(W+300)-150;x.beginPath();x.ellipse(cx,50+j%2*30,46,18,0,0,7);x.ellipse(cx+30,42+j%2*30,30,16,0,0,7);x.fill()});
+  hills.forEach(h=>{const hx=h.x-cam*.45;if(hx<-300||hx>W+300)return;x.fillStyle=TH.hill;x.beginPath();if(i===1){x.moveTo(hx-h.r,GY+10);x.lineTo(hx,GY+10-h.r);x.lineTo(hx+h.r,GY+10)}else x.arc(hx,GY+10,h.r,Math.PI,0);x.fill()});
+  x.save();x.translate(-Math.round(cam),0);
+  for(const s of solids){if(s.x>cam+W||s.x+s.w<cam)continue;
+   if(s.t==='g'){x.fillStyle=TH.body;x.fillRect(s.x,s.y,s.w,s.h);x.fillStyle=TH.top;x.fillRect(s.x,s.y,s.w,10);
+    x.fillStyle='rgba(0,0,0,.08)';for(let z=s.x;z<s.x+s.w;z+=34)x.fillRect(z,s.y+22,16,8)}
+   else{x.fillStyle=TH.plat;rr(s.x,s.y,s.w,s.h,8);x.fill();x.fillStyle='#ffd34e';x.fillRect(s.x+6,s.y+4,s.w-12,4)}}
+  gates.forEach(gt=>{if(gt.open||gt.x>cam+W||gt.x<cam-50)return;x.fillStyle='#6c5ce7';x.fillRect(gt.x,gt.y,gt.w,gt.h);
+   x.fillStyle='#ffd34e';for(let y=20;y<GY;y+=40){x.beginPath();x.arc(gt.x+gt.w/2,y,5,0,7);x.fill()}});
+  x.font=`900 ${W<500?15:17}px Cairo,Tahoma,sans-serif`;x.textAlign='center';x.textBaseline='middle';x.direction='rtl';
+  crates.forEach(c=>{if(c.x>cam+W||c.x+c.w<cam)return;const by=c.y-(c.bump>0?Math.sin(c.bump/8*Math.PI)*8:0);
+   const active=c.k===cur&&!c.hit;
+   x.fillStyle=c.hit===1?'#2ecc71':c.hit===2?'#ff5b5b':active?'#e0a15a':'#b58a63';rr(c.x,by,c.w,c.h,8);x.fill();
+   x.strokeStyle='rgba(0,0,0,.25)';x.lineWidth=3;rr(c.x+3,by+3,c.w-6,c.h-6,6);x.stroke();
+   x.fillStyle=c.hit?'#fff':'#2b1a0e';x.fillText(c.t,c.x+c.w/2,by+c.h/2+2)});
+  enemies.forEach(e=>{if(e.dead>30)return;const sq=e.dead?.4:1;const ex=e.x,ey=e.y+e.h*(1-sq);
+   x.fillStyle=TH.en;x.beginPath();x.ellipse(ex+e.w/2,ey+e.h*sq/2+2,e.w/2,e.h*sq/2,0,0,7);x.fill();
+   x.fillStyle='#4a2c17';for(let s=0;s<6;s++){const a=Math.PI+s*Math.PI/5;x.beginPath();x.moveTo(ex+e.w/2+Math.cos(a)*14,ey+e.h*sq/2+Math.sin(a)*10*sq);x.lineTo(ex+e.w/2+Math.cos(a)*24,ey+e.h*sq/2+Math.sin(a)*18*sq);x.lineTo(ex+e.w/2+Math.cos(a+.3)*14,ey+e.h*sq/2+Math.sin(a+.3)*10*sq);x.fill()}
+   x.fillStyle='#fff';x.beginPath();x.arc(ex+(e.v>0?26:10),ey+e.h*sq/2,4,0,7);x.fill()});
+  [3,6].forEach(k=>{const fx2=START+k*SEG+60;x.fillStyle='#fff';x.fillRect(fx2,GY-70,4,70);x.fillStyle=k<=cur?'#2ecc71':'#ff6f91';x.beginPath();x.moveTo(fx2+4,GY-70);x.lineTo(fx2+30,GY-60);x.lineTo(fx2+4,GY-50);x.fill()});
+  /* بوابة النصر */
+  const fx=END+40;x.fillStyle='#0b6e75';x.fillRect(fx,GY-170,10,170);x.fillStyle='#ffd34e';x.beginPath();x.moveTo(fx+10,GY-170);x.lineTo(fx+60,GY-150);x.lineTo(fx+10,GY-130);x.fill();
+  x.fillStyle='#ff6f91';rr(fx+80,GY-110,120,110,10);x.fill();x.fillStyle='#ffd34e';rr(fx+120,GY-60,40,60,20);x.fill();
+  /* البطل */
+  if(!(hero.inv>0&&Math.floor(hero.inv/5)%2)){
+   const hx=hero.x,hy=hero.y,fc=hero.face,leg=hero.on?Math.sin(hero.step)*6:4;
+   x.fillStyle='#1d2b3a';x.fillRect(hx+6,hy+34,7,10+leg*.3);x.fillRect(hx+17,hy+34,7,10-leg*.3);
+   x.fillStyle='#0f9d9a';rr(hx+2,hy+18,26,20,7);x.fill();
+   x.fillStyle='#f2c9a0';x.beginPath();x.arc(hx+15,hy+12,10,0,7);x.fill();
+   x.fillStyle='#ffd34e';rr(hx+4,hy-1,22,8,4);x.fill();x.fillStyle='#ff8a3d';x.fillRect(fc>0?hx+18:hx-2,hy+4,14,4);
+   x.fillStyle='#1d2b3a';x.beginPath();x.arc(hx+15+fc*4,hy+12,2,0,7);x.fill();
+   x.fillStyle='#ff6f91';x.fillRect(fc>0?hx-2:hx+26,hy+20,6,12);
+   x.font='900 12px Cairo,sans-serif';x.textAlign='center';x.fillStyle='#fff';x.strokeStyle='rgba(0,0,0,.45)';x.lineWidth=3;x.strokeText('فارس',hx+15,hy-8);x.fillText('فارس',hx+15,hy-8)}
+  x.font='900 18px Cairo,sans-serif';stars.forEach(s=>{x.globalAlpha=Math.max(0,s.life/50);x.fillStyle=s.t==='✘'?'#ff5b5b':'#ffb300';x.fillText('⭐ '+s.t,s.x,s.y);x.globalAlpha=1});
+  x.restore();
+ }
+ function loop(t){if(S.stop)return;const f=Math.min(2,(t-(tPrev||t))/16.67||1);tPrev=t;if(run)update(f);draw();requestAnimationFrame(loop)}
+ const KM={ArrowLeft:'L',ArrowRight:'R',ArrowUp:'J',' ':'J'};
+ S.key=e=>{const k=KM[e.key];if(k&&run){e.preventDefault();keys[k]=1}};S.key2=e=>{const k=KM[e.key];if(k)keys[k]=0};
+ addEventListener('keydown',S.key);addEventListener('keyup',S.key2);
+ app.querySelectorAll('[data-k]').forEach(b=>{const k=b.dataset.k;
+  b.onpointerdown=e=>{e.preventDefault();keys[k]=1;try{b.setPointerCapture(e.pointerId)}catch(_){}};
+  b.onpointerup=b.onpointercancel=b.onpointerleave=()=>{keys[k]=0}});
+ document.getElementById('bk').onclick=()=>{stopSnake();modes(i)};
+ document.getElementById('sgo').onclick=()=>{document.getElementById('sno').hidden=true;run=true};
+ S.pause=()=>{if(run){run=false;keys.L=keys.R=keys.J=0;const o=document.getElementById('sno');if(o){o.hidden=false;o.innerHTML='<div><b>توقّف مؤقت</b><button class="b3d y" id="sres">تابع ▶</button></div>';document.getElementById('sres').onclick=()=>{o.hidden=true;run=true}}}};
+ setPrompt();requestAnimationFrame(loop);
+}
+
+function hud(){return `<div class="hud"><span class="pill nm">🧑‍🎓 ${esc(player)}</span><span class="pill">${L.icon} ${L.short}</span><span class="pill sp" id="pts">🪙 ${AR(points)}</span><span class="pill" id="stk">🔥 ${AR(streak)}</span></div>`}
+
+function question(){
+ answered=false;const Q=qs[qi];const long=!!Q.two;
+ order=shuffle(Q.o.map((t,i)=>({t,i})));
+ app.innerHTML=`<div class="screen">${hud()}
+  ${MODE==='adv'?advTrail():`<div class="dots">${qs.map((_,j)=>`<i class="${j<qi?(res[j]?'ok':'no'):j===qi?'cur':''}"></i>`).join('')}</div>`}
+  ${useTimer?'<div class="timer"><div id="tb"></div></div>':'<div style="height:8px"></div>'}
+  <div class="qcard">
+   <div class="qtop"><span class="n">${AR(qi+1)}</span><span>${Q.ask}</span><span class="tag">${MODE==='adv'&&qi>=qs.length-3?'👑 الزعيم':Q.tag}</span></div>
+   <div class="sent">${Q.s}</div>
+   <div class="answers ${long?'long':''}">${order.map((o,k)=>`<button class="b3d ans ${COLORS[k]}" data-k="${k}"><span class="sh">${SHAPES[k]}</span><span>${o.t}</span></button>`).join('')}</div>
+   <div id="fb"></div>
+   <div class="next"><button class="b3d y" id="nx" hidden>التالي ⬅</button></div>
+  </div></div>`;
+ app.querySelectorAll('.ans').forEach(b=>b.onclick=e=>pick(+b.dataset.k,e));
+ if(useTimer)runT();
+}
+
+function runT(){stopT();tLeft=TIME;const tb=document.getElementById('tb');
+ tmr=setInterval(()=>{tLeft-=.2;if(tb)tb.style.transform=`scaleX(${Math.max(0,tLeft/TIME)})`;if(tLeft<=0){stopT();pick(-1)}},200)}
+function stopT(){if(tmr){clearInterval(tmr);tmr=null}}
+
+function pick(k,e){
+ if(answered)return;answered=true;stopT();const Q=qs[qi];const ok=k>=0&&order[k].i===Q.a;
+ const btns=app.querySelectorAll('.ans');
+ btns.forEach((b,j)=>{b.disabled=true;if(order[j].i===Q.a)b.classList.add('right');else if(j!==k)b.classList.add('dim')});
+ if(k>=0&&!ok)btns[k].classList.add('wrong');
+ res[qi]=ok;
+ if(ok){correct++;streak++;bestStreak=Math.max(bestStreak,streak);const gain=100+(useTimer?Math.round(tLeft*4):0)+(streak>=3?50:0);points+=gain;
+  if(e){const f=document.createElement('div');f.className='float';f.textContent='+'+AR(gain);f.style.left=e.clientX-30+'px';f.style.top=e.clientY-30+'px';document.body.appendChild(f);setTimeout(()=>f.remove(),1000)}}
+ else{streak=0;if(MODE==='adv'){hearts--;const h=document.getElementById('hearts');if(h)h.innerHTML=heartsHtml()}}
+ document.getElementById('pts').textContent='🪙 '+AR(points);document.getElementById('stk').textContent='🔥 '+AR(streak);
+ beep(ok?'ok':'no');
+ const head=ok?(streak>=3?'سلسلة نارية! 🔥':'أحسنت! ✔'):(k<0?'انتهى الوقت ⏰':'انتبه ✘');
+ document.getElementById('fb').innerHTML=`<div class="fb ${ok?'ok':'no'}"><b>${head}</b><span>${ok?'':'الصحيح: «'+Q.o[Q.a]+'». '}${Q.why}</span></div>`;
+ const dead=MODE==='adv'&&hearts<=0;const last=dead||qi===qs.length-1;const nx=document.getElementById('nx');nx.hidden=false;nx.textContent=dead?'💔 انتهت القلوب – النتيجة':last?'النتيجة 🏁':MODE==='adv'?'تقدّم 👣':'التالي ⬅';
+ nx.onclick=()=>{if(!last){qi++;question()}else finish()};nx.focus();
+}
+
+function finish(){
+ stopSnake();
+ const n=MODE==='quiz'||MODE==='adv'?qs.length:10,st=correct>=9?3:correct>=7?2:correct>=5?1:0;
+ if(best[L.id]==null||correct>best[L.id]){best[L.id]=correct;try{localStorage.setItem('mu3tal-best',JSON.stringify(best))}catch(e){}}
+ const AW=awardBadges(n);
+ const msg=st===3?'بطل الفعل المعتل!':st===2?'أداء رائع!':st===1?'جيد، تستطيع أفضل!':'راجع القاعدة وحاول مجددًا';
+ app.innerHTML=`<div class="screen end">${hud()}
+  <div class="trophy">${st===3?'🏆':st===2?'🥈':st===1?'🥉':'💪'}</div>
+  <div class="stars">${[0,1,2].map(i=>`<span class="${i<st?'lit':''}">★</span>`).join('')}</div>
+  <h2>${esc(player)}، ${msg}</h2>
+  <div class="grade"><small>الدرجة</small><b>${AR(correct)} / ${AR(n)}</b></div>
+  <div class="stats"><span class="pill">🪙 ${AR(points)} نقطة</span><span class="pill">🔥 أطول سلسلة ${AR(bestStreak)}</span><span class="pill">${MODES[MODE].icon} ${MODES[MODE].name}</span>${extraStat||''}</div>
+  ${AW.lvUp?`<div class="lvup">⬆️ ارتقيت إلى مستوى <b>${AW.lvUp.icon} ${AW.lvUp.name}</b>!</div>`:''}
+  ${AW.fresh.length?`<div class="newb"><h3>🎉 أوسمة جديدة!</h3><div class="bgrid">${AW.fresh.map(b=>`<div class="bdg got pop"><span class="bi">${b.i}</span><b>${b.n}</b><small>${b.d}</small></div>`).join('')}</div></div>`:''}
+  <div class="btns"><button class="b3d p" id="again">العب مجددًا 🔁</button><button class="b3d" id="hm">العوالم 🗺️</button></div>
+  <p class="saved" id="sv">⏳ جارٍ حفظ النتيجة…</p></div>`;
+ document.getElementById('again').onclick=()=>playMode(L.idx,MODE);document.getElementById('hm').onclick=()=>modes(L.idx);document.getElementById('hm').textContent='الألعاب 🎮';
+ if(st>=2||AW.fresh.length){beep('win');confetti()}
+ const rec={name:player,lesson:L.id,mode:MODE,badges:AW.p.badges.length,newBadges:AW.fresh.map(b=>b.i+' '+b.n),correct,total:n,points,streak:bestStreak,miss:(MODE==='quiz'||MODE==='adv'?qs.map((q,j)=>res[j]===false?q.s.replace(/<[^>]+>/g,'').replace('؟','____'):null):missList).filter(Boolean).slice(0,10),at:Date.now()};
+ saveResult(rec).then(w=>{const s=document.getElementById('sv');if(s)s.textContent=w==='shared'?'✅ وصلت نتيجتك إلى المعلم':'✅ حُفظت النتيجة على هذا الجهاز'});
+}
+
+/* ===== صفحة نتائج الطلاب ===== */
+let rTab='all',rConfirm=false;
+const fmtT=t=>{try{return new Date(t).toLocaleString('ar-BH',{weekday:'short',day:'numeric',month:'numeric',hour:'2-digit',minute:'2-digit'})}catch(e){return ''}};
+const scls=(c,t)=>{const p=c/t;return p>=.9?'s3':p>=.7?'s2':p>=.5?'s1':'s0'};
+function pinGate(){
+ stopT();stopSnake();
+ if(pinOk){results();return}
+ app.innerHTML=`<div class="screen"><div class="rp" style="max-width:420px;margin:30px auto;text-align:center">
+  <div style="font-size:52px">🔒</div><h1>صفحة المعلم</h1><p class="meta">أدخل الرقم السري لعرض نتائج الطلاب</p>
+  <input id="pin" type="password" inputmode="numeric" maxlength="8" autocomplete="off" aria-label="الرقم السري" style="font:inherit;font-size:28px;font-weight:900;text-align:center;letter-spacing:10px;width:200px;max-width:100%;margin:12px auto 4px;display:block;border:3px solid var(--orange);border-radius:14px;padding:4px;color:var(--ink);background:#fff">
+  <p class="note" id="pinMsg" style="color:#b33;min-height:1.5em"></p>
+  <div class="btns" style="margin-top:6px"><button class="b3d g" id="pbk">رجوع</button><button class="b3d y" id="pgo">دخول</button></div></div></div>`;
+ const inp=document.getElementById('pin');inp.focus();
+ const go=()=>{if(inp.value.trim()===TEACHER_PIN){pinOk=true;results()}else{document.getElementById('pinMsg').textContent='الرقم السري غير صحيح';inp.value='';inp.focus();beep('no')}};
+ document.getElementById('pgo').onclick=go;inp.onkeydown=e=>{if(e.key==='Enter')go()};
+ document.getElementById('pbk').onclick=()=>{try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}home()};
+}
+async function results(){
+ if(!pinOk){pinGate();return}
+ stopT();try{history.replaceState(null,'','#results')}catch(e){}
+ app.innerHTML=`<div class="screen"><div class="rp"><p class="empty">⏳ جارٍ تحميل النتائج…</p></div></div>`;
+ const all=(await loadResults()).filter(r=>r&&r.name);
+ const mine=all.filter(r=>rTab==='all'||recW(r).cat===rTab);
+ const played=new Set(all.map(r=>r.name));
+ const avg=all.length?all.reduce((s,r)=>s+r.correct/(r.total||10),0)/all.length*10:0;
+ /* أفضل درجة لكل طالب في كل عالم */
+ const bestOf={};all.forEach(r=>{const k=r.name+'|'+(recW(r).id||'');if(!bestOf[k]||r.correct>bestOf[k].correct)bestOf[k]=r});
+ const names=STUDENTS.length?STUDENTS:[...played];
+ const extra=[...played].filter(n=>!names.includes(n));
+ const tabs=[['all','كل المحاولات'],['grid','لوحة الصف'],['nahw','🏛️ النحو'],['imla','✍️ الإملاء']];
+ let body='';
+ if(rTab==='grid'){
+  body=`<div class="scroll"><table class="res"><thead><tr><th>م</th><th>اسم الطالب</th>${WORLDS.map(w=>`<th class="c" style="font-size:12px;min-width:64px">${w.icon}<br>${w.short}</th>`).join('')}<th class="c">الأوسمة</th><th class="c">المحاولات</th></tr></thead><tbody>
+  ${[...names,...extra].map((n,i)=>`<tr><td>${AR(i+1)}</td><td>${esc(n)}</td>${WORLDS.map((w,j)=>{const b=bestOf[n+'|'+w.id];return `<td class="c">${b?`<span class="sc ${scls(b.correct,b.total||10)}">${AR(b.correct)}/${AR(b.total||10)}</span>`:'<span class="sn">—</span>'}</td>`}).join('')}<td class="c">🎖️ ${AR(Math.max(0,...all.filter(r=>r.name===n).map(r=>r.badges||0)))}</td><td class="c">${AR(all.filter(r=>r.name===n).length)}</td></tr>`).join('')}
+  </tbody></table></div><p class="note">تعرض اللوحة أفضل درجة لكل طالب في كل عالم، والشَّرطة (—) تعني أنه لم يلعب ذلك العالم بعد.</p>`;
+ }else if(!mine.length){
+  body=`<div class="empty">لا توجد نتائج بعد. حين ينهي طالب أي عالم تظهر نتيجته هنا مباشرة.</div>`;
+ }else{
+  body=`<div class="scroll"><table class="res"><thead><tr><th>الوقت</th><th>اسم الطالب</th><th>الدرس</th><th class="c">الدرجة</th><th class="c">النقاط</th><th>الأوسمة الجديدة والأخطاء</th></tr></thead><tbody>
+  ${mine.map(r=>{const w=recW(r);return `<tr><td>${fmtT(r.at)}</td><td>${esc(r.name)}</td><td>${w.icon||''} ${w.short||''}<br><small>${(MODES[r.mode||'quiz']||{}).icon||''} ${(MODES[r.mode||'quiz']||{}).name||''}</small></td><td class="c"><span class="sc ${scls(r.correct,r.total||10)}">${AR(r.correct)}/${AR(r.total||10)}</span></td><td class="c">${AR(r.points||0)}</td><td style="font-size:13px">${(r.newBadges||[]).length?`<div style="color:#8a6400;font-weight:800">${r.newBadges.map(esc).join(' • ')}</div>`:''}${(r.miss||[]).map(esc).join('<br>')||'<span class="sn">لا أخطاء 🎉</span>'}</td></tr>`}).join('')}
+  </tbody></table></div>`;
+ }
+ app.innerHTML=`<div class="screen"><div class="rp">
+  <h1>📊 نتائج الطلاب</h1>
+  <p class="meta">مغامرة فارس • الصف السادس • ${DB?'نتائج كل الأجهزة، تتحدث تلقائيًا':'النتائج المحفوظة على هذا الجهاز فقط'}</p>
+  <div class="kpis"><div class="kpi"><b>${AR(all.length)}</b><span>محاولة</span></div><div class="kpi"><b>${AR(played.size)} / ${AR(STUDENTS.length||played.size)}</b><span>طالب لعبوا</span></div><div class="kpi"><b>${AR(avg.toFixed(1))}</b><span>متوسط الدرجة من ١٠</span></div><div class="kpi"><b>${AR(all.filter(r=>r.correct>=9).length)}</b><span>وسام فرسان العربية</span></div></div>
+  <div class="tabs" role="tablist">${tabs.map(([k,t])=>`<button class="tab" role="tab" data-t="${k}" aria-selected="${rTab===k}">${t}</button>`).join('')}</div>
+  ${body}
+  <div class="tools"><button class="b3d g" id="bk">⬅ العودة إلى اللعبة</button>
+   <span style="display:flex;gap:10px;flex-wrap:wrap"><button class="b3d o" id="csv">⬇ تنزيل Excel (CSV)</button>${rConfirm?`<span class="confirm">حذف كل النتائج نهائيًا؟ <button class="b3d p" id="yes">نعم، احذف</button><button class="b3d g" id="no">إلغاء</button></span>`:`<button class="b3d p" id="clr">🗑 مسح النتائج</button>`}</span></div>
+  <p class="note" id="msg"></p></div></div>`;
+ app.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{rTab=b.dataset.t;results()});
+ document.getElementById('bk').onclick=()=>{try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}stopLive();home()};
+ document.getElementById('csv').onclick=()=>exportCsv(all);
+ const clr=document.getElementById('clr');if(clr)clr.onclick=()=>{rConfirm=true;results()};
+ const no=document.getElementById('no');if(no)no.onclick=()=>{rConfirm=false;results()};
+ const yes=document.getElementById('yes');if(yes)yes.onclick=async()=>{yes.disabled=true;
+  if(DB){for(const r of all){if(r.id){try{await DB.doc('results/'+r.id).delete()}catch(e){}}}}
+  try{localStorage.removeItem(LOCAL_KEY)}catch(e){}
+  rConfirm=false;results()};
+ startLive();
+}
+/* تحديث مباشر حين يُنهي طالب عالمًا */
+let unsub=null,liveT=null;
+function startLive(){if(!DB||unsub)return;let first=true;
+ try{unsub=DB.collection('results').orderBy('at','desc').limit(1).onSnapshot(()=>{if(first){first=false;return}clearTimeout(liveT);liveT=setTimeout(()=>{if(location.hash==='#results'&&!rConfirm)results()},400)},()=>{unsub=null})}catch(e){}}
+function stopLive(){if(unsub){try{unsub()}catch(e){}unsub=null}}
+async function exportCsv(all){
+ const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ const rows=[['التاريخ','اسم الطالب','الدرس','الدرجة','من','النقاط','الأسئلة الخاطئة'].map(q).join(',')]
+  .concat(all.map(r=>[fmtT(r.at),r.name,((recW(r)).name||'')+' – '+((MODES[r.mode||'quiz']||{}).name||''),r.correct,r.total||10,r.points||0,(r.miss||[]).join(' | ')].map(q).join(',')));
+ const data='﻿'+rows.join('\r\n');const m=document.getElementById('msg');
+ const dl=window.claude&&claude.use?await claude.use('downloads'):null;
+ if(dl){try{await dl.save({filename:'نتائج_مغامرة_الفعل_المعتل.csv',data});m.textContent='✅ تم التنزيل'}catch(e){m.textContent=e&&e.code==='declined'?'':'تعذّر التنزيل من هنا.'}return}
+ try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'text/csv'}));a.download='نتائج_مغامرة_الفعل_المعتل.csv';a.click();m.textContent='✅ تم التنزيل'}catch(e){m.textContent='تعذّر التنزيل من هنا.'}
+}
+
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const c=['#0f9d9a','#ff8a3d','#ffd34e','#ff6f91','#2ecc71'];
+ for(let i=0;i<80;i++){const d=document.createElement('div');d.className='confetti';d.style.left=Math.random()*100+'vw';d.style.background=c[i%5];d.style.animationDuration=(1.8+Math.random()*1.8)+'s';d.style.animationDelay=Math.random()*.7+'s';document.body.appendChild(d);setTimeout(()=>d.remove(),4600)}}
+
+/* يراعات الغابة في الخلفية */
+(function(){const cv=document.getElementById('sky'),x=cv.getContext('2d');let W,H,S=[];
+ function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;S=Array.from({length:38},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2+1.2,p:Math.random()*6,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3}))}
+ rs();addEventListener('resize',rs);const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ function f(t){x.clearRect(0,0,W,H);S.forEach(s=>{if(!still){s.x=(s.x+s.vx+W)%W;s.y=(s.y+s.vy+H)%H}const a=.25+.6*Math.abs(Math.sin(s.p+t/900));x.globalAlpha=a*.35;x.fillStyle='#ffe57a';x.beginPath();x.arc(s.x,s.y,s.r*3.2,0,7);x.fill();x.globalAlpha=a;x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill()});x.globalAlpha=1;if(!still)requestAnimationFrame(f)}
+ f(0)})();
+
+WORLDS=buildWorlds();
+home();
+</script>
+</body>
+</html>

@@ -220,9 +220,9 @@ body.playing{padding-left:max(6px,env(safe-area-inset-left,0px));padding-right:m
 .playing .hud{padding:4px 8px;gap:6px}
 .playing .q{margin:6px 0;padding:4px 10px}.playing .q div{font-size:clamp(17px,4vw,24px)}
 .playing .view{width:100%;border-width:3px}
-.playing .pad{max-width:none;margin-top:8px}
+.playing .pad{max-width:none;margin-top:10px;margin-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
 .xbtn{border:3px solid var(--line,#2b1a0e);background:#e53935;color:#fff;border-radius:10px;width:34px;height:30px;padding:0;font-weight:900;font-size:16px;line-height:1}
-.land .pad{position:fixed;left:0;right:0;bottom:max(8px,env(safe-area-inset-bottom,0px));padding:0 max(14px,env(safe-area-inset-left,0px)) 0 max(14px,env(safe-area-inset-right,0px));margin:0;z-index:20;pointer-events:none}
+.land .pad{position:fixed;left:0;right:0;bottom:calc(26px + env(safe-area-inset-bottom,0px));padding:0 max(14px,env(safe-area-inset-left,0px)) 0 max(14px,env(safe-area-inset-right,0px));margin:0;z-index:20;pointer-events:none}
 .land .pad .b3d{pointer-events:auto;opacity:.82;height:64px}
 .land .q small{display:inline;margin-inline-end:8px}.land .q div{display:inline}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -1052,7 +1052,7 @@ function startStage(wi,s){
  document.body.classList.add('playing');scrollTo(0,0);
  const dpr=window.devicePixelRatio||1;
  const isLand=()=>innerWidth>innerHeight&&innerHeight<520;
- function fit(){document.body.classList.toggle('land',isLand());const cw=app.clientWidth,res=(document.querySelector('.hud').offsetHeight+document.querySelector('.q').offsetHeight+(isLand()?0:document.querySelector('.pad').offsetHeight)+(isLand()?16:34));
+ function fit(){document.body.classList.toggle('land',isLand());const cw=app.clientWidth,res=(document.querySelector('.hud').offsetHeight+document.querySelector('.q').offsetHeight+(isLand()?0:document.querySelector('.pad').offsetHeight)+(isLand()?16:84));
   const ch=Math.max(isLand()?200:300,Math.min(innerHeight-res,cw*1.4,820));const k=Math.max(isLand()?.75:1,Math.min(ch/340,cw/300,1.6));
   cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);x.setTransform(dpr*k,0,0,dpr*k,0,0);return {W:cw/k,H:ch/k}}
  let {W,H}=fit();
@@ -1083,7 +1083,7 @@ function startStage(wi,s){
  const keys={L:0,R:0,J:0};let cam=0,cur=0,run=false,done=false,lastJ=0,tPrev=0,hearts=3,res=[];
  G={stop:false};const S=G;
  /* عند تدوير الجوال: نُبقي ارتفاع العالم ونعيد تحجيم الرسم */
- S.rs=()=>{document.body.classList.toggle('land',isLand());const cw=app.clientWidth,res=(document.querySelector('.hud').offsetHeight+document.querySelector('.q').offsetHeight+(isLand()?0:document.querySelector('.pad').offsetHeight)+(isLand()?16:34));const ch=Math.max(260,Math.min(innerHeight-res,cw*1.4,820)),k=ch/H;cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);x.setTransform(dpr*k,0,0,dpr*k,0,0);W=cw/k};
+ S.rs=()=>{document.body.classList.toggle('land',isLand());const cw=app.clientWidth,res=(document.querySelector('.hud').offsetHeight+document.querySelector('.q').offsetHeight+(isLand()?0:document.querySelector('.pad').offsetHeight)+(isLand()?16:84));const ch=Math.max(260,Math.min(innerHeight-res,cw*1.4,820)),k=ch/H;cv.style.width=cw+'px';cv.style.height=ch+'px';cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);x.setTransform(dpr*k,0,0,dpr*k,0,0);W=cw/k};
  addEventListener('resize',S.rs);
  const hills=Array.from({length:12},(_,j)=>({x:j*420+Math.random()*200,r:110+Math.random()*90}));
  const TK=[['round','pine'],['palm','palm'],['pine','round'],['round','palm']][wi%4];

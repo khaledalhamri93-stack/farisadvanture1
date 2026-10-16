@@ -1283,7 +1283,7 @@ async function results(){
   <div class="kpis"><div class="kpi"><b>${AR(all.length)}</b><span>مرحلة لُعبت</span></div><div class="kpi"><b>${AR(played.size)}/${AR(STUDENTS.length)}</b><span>طالب لعبوا</span></div><div class="kpi"><b>${AR(all.filter(r=>r.win&&r.stage===2).length)}</b><span>عالم أُكمل</span></div><div class="kpi"><b>${AR(all.length?(all.reduce((s,r)=>s+r.correct/(r.total||1),0)/all.length*10).toFixed(1):0)}</b><span>متوسط من ١٠</span></div></div>
   <div class="rtabs" role="tablist">${tabs.map(([k,t])=>`<button class="rtab" role="tab" data-t="${k}" aria-selected="${rTab===k}">${t}</button>`).join('')}</div>
   ${body}
-  <div class="btns" style="justify-content:space-between"><button class="b3d g" id="bk">⬅ الصفحة الرئيسية</button><button class="b3d y" id="pod">🏆 منصّة الأبطال</button><button class="b3d v" id="tpw">🔑 كلمة السر</button><button class="b3d g" id="tbak">💾 النسخة الاحتياطية</button><button class="b3d o" id="tdef">♻️ الإعدادات الأصلية</button>
+  <div class="btns" style="justify-content:space-between"><button class="b3d g" id="bk">⬅ الصفحة الرئيسية</button><button class="b3d y" id="pod">🏆 منصّة الأبطال</button><button class="b3d v" id="tpw">🔑 كلمة السر</button><button class="b3d g" id="tbak">💾 النسخة الاحتياطية</button>
    <span class="row"><button class="b3d o" id="csv">⬇ تنزيل Excel (CSV)</button><button class="b3d v" id="ua">${unlockAll?'🔒 أعد قفل العوالم':'🔓 افتح كل العوالم'}</button>${rConfirm?`<span class="confirm">حذف كل النتائج نهائيًا؟ <button class="b3d p" id="yes">نعم</button><button class="b3d g" id="no">إلغاء</button></span>`:`<button class="b3d p" id="clr">🗑 مسح النتائج</button>`}</span></div>
   <div class="btns" style="justify-content:flex-start;margin-top:12px"><button class="b3d p" id="rs">♻️ إعادة الإعدادات</button></div>
   ${rsOpen?resetPanel():''}
@@ -1292,7 +1292,7 @@ async function results(){
  app.querySelectorAll('.rtab').forEach(b=>b.onclick=()=>{rTab=b.dataset.t;results()});
  $('bk').onclick=home;
  bindReset();
- $('pod').onclick=()=>podium(results);if($('tpw'))$('tpw').onclick=()=>{if(window.KIT&&KIT.changePin)KIT.changePin()};if($('tbak'))$('tbak').onclick=()=>{if(window.KIT&&KIT.openBackup)KIT.openBackup()};if($('tdef'))$('tdef').onclick=()=>{if(window.KIT&&KIT.openDefaults)KIT.openDefaults()};
+ $('pod').onclick=()=>podium(results);if($('tpw'))$('tpw').onclick=()=>{if(window.KIT&&KIT.changePin)KIT.changePin()};if($('tbak'))$('tbak').onclick=()=>{if(window.KIT&&KIT.openBackup)KIT.openBackup()};
  $('ua').onclick=()=>{unlockAll=!unlockAll;LS.set('faris-unlock-all',unlockAll);results()};
  $('csv').onclick=()=>exportCsv(all);
  const clr=$('clr');if(clr)clr.onclick=()=>{rConfirm=true;results()};
